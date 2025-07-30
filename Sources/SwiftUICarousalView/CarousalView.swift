@@ -22,11 +22,15 @@ public struct CarousalView: View {
     public var body: some View {
         VStack(spacing: configuration.verticalPadding) {
             carousalView
+                .frame(width: .infinity, height: configuration.itemHeight)
             
-            if configuration.withPageControl {
-                // TODO: PageControlView
+            if let pageControlItem = configuration.pageControlItem {
+                PageControlView(currentIndex: $currentIndex, dataSource: $dataSource, pageControlItem: pageControlItem)
             }
         }
+        .background(configuration.backgroundColor)
+        .padding()
+        .clipped()
     }
 }
 

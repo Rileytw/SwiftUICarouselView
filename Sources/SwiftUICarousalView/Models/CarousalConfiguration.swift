@@ -6,17 +6,22 @@
 //
 
 import Foundation
+import SwiftUI
 
 public struct CarousalConfiguration {
     let itemWidth: CGFloat
+    let itemHeight: CGFloat
     let itemPadding: CGFloat
-    let withPageControl: Bool
     let verticalPadding: CGFloat
+    let backgroundColor: Color
+    let pageControlItem: PageControlItem?
     
-    public init(itemWidth: CGFloat, itemPadding: CGFloat = 16, withPageControl: Bool = true, verticalPadding: CGFloat = 8) {
+    public init(itemWidth: CGFloat, itemHeight: CGFloat, itemPadding: CGFloat = 16, verticalPadding: CGFloat = 16, backgroundColor: Color = .clear, pageControlItem: PageControlItem? = .default(.gray, .blue)) {
         self.itemWidth = itemWidth
+        self.itemHeight = itemHeight
         self.itemPadding = itemPadding
-        self.withPageControl = withPageControl
         self.verticalPadding = verticalPadding
+        self.backgroundColor = backgroundColor
+        self.pageControlItem = pageControlItem
     }
 }
