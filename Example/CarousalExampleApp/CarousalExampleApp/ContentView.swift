@@ -6,16 +6,49 @@
 //
 
 import SwiftUI
+import SwiftUICarousalView
 
 struct ContentView: View {
+    private let itemWidth: CGFloat = 300
+    
     var body: some View {
+        CarousalView(configuration: CarousalConfiguration(itemWidth: itemWidth), dataSource: carousalItems)
+    }
+}
+
+// MARK: - Private Methods
+private extension ContentView {
+    var carousalItems: [CarousalItem] {
+        return [CarousalItem(content: {
+            createCard("Item 1")
+        }), CarousalItem(content: {
+            createCard("Item 2")
+        }), CarousalItem(content: {
+            createCard("Item 3")
+        }), CarousalItem(content: {
+            createCard("Item 4")
+        })]
+    }
+    
+    @ViewBuilder
+    func createCard(_ content: String) -> some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text(content)
+                .font(.title2)
+                .fontWeight(.medium)
+            
+            Rectangle()
+                .fill(Color.blue.opacity(0.1))
+                .frame(height: 100)
+                .overlay(
+                    Text("Content")
+                        .foregroundColor(.secondary)
+                )
         }
-        .padding()
+        .frame(width: itemWidth, height: 200)
+        .background(Color.white)
+        .cornerRadius(15)
+        .shadow(radius: 5)
     }
 }
 
