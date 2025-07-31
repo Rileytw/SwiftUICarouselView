@@ -14,8 +14,8 @@ struct ContentView: View {
     
     var body: some View {
         CarousalView(configuration: CarousalConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
-//            .indicatorEnabled() // TODO: Fix environment key issues
             .scaleEffectEnabled()
+            .indicatorEnabled()
             .frame(maxWidth: .infinity)
     }
 }
@@ -53,6 +53,11 @@ private extension ContentView {
         .background(Color.white)
         .cornerRadius(15)
         .shadow(radius: 5)
+    }
+    
+    @ViewBuilder
+    var normalView: some View {
+        Text("")
     }
 }
 

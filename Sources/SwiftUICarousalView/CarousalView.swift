@@ -8,8 +8,7 @@
 import SwiftUI
 
 public struct CarousalView: View {
-    @Environment(\.indicatorStyle) private var indicatorStyle
-    @Environment(\.scaleAnimationStyle) private var scaleAnimationStyle
+    @Environment(\.carousalStyle) private var carousalStyle
     
     @State private var configuration: CarousalConfiguration
     @State private var dataSource: [CarousalItem]
@@ -27,32 +26,13 @@ public struct CarousalView: View {
             carousalView
                 .frame(maxWidth: .infinity, maxHeight: configuration.itemHeight)
             
-            if let indicatorStyle = indicatorStyle {
+            if let indicatorStyle = carousalStyle.indicatorStyle {
                 IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicatorStyle: indicatorStyle)
             }
         }
         .background(configuration.backgroundColor)
         .padding()
         .clipped()
-    }
-}
-
-// MARK: - Public Methods
-public extension CarousalView {
-    func indicatorEnabled(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
-        self.environment(\.indicatorStyle, .default(normalColor, selectedColor, backgroundStyle))
-    }
-    
-    func indicatorEnabled<N: View, S: View>(normal: N, selected: S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
-        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle))
-    }
-   
-    func indicatorEnabled<N: View, S: View>(@ViewBuilder normal: () -> N, @ViewBuilder selected: () -> S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
-        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle))
-    }
-    
-    func scaleEffectEnabled(_ style: ScaleAnimationStyle = .default) -> some View {
-        self.environment(\.scaleAnimationStyle, style)
     }
 }
 
@@ -65,7 +45,7 @@ private extension CarousalView {
             
             HStack(spacing: configuration.itemPadding) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    if let scaleAnimationStyle = scaleAnimationStyle {
+                    if let scaleAnimationStyle = carousalStyle.scaleAnimationStyle {
                         item.view
                             .frame(width: itemWidth)
                             .scaleEffect(index == currentIndex ? 1.0 : scaleAnimationStyle.unselectedScale)

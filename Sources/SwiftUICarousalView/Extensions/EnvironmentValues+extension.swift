@@ -8,23 +8,24 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    var indicatorStyle: IndicatorStyle? {
-        get { self[IndicatorStyleKey.self] }
-        set { self[IndicatorStyleKey.self] = newValue }
+    var carousalStyle: CarousalStyle {
+        get { self[CarousalStyleKey.self] }
+        set { self[CarousalStyleKey.self] = newValue }
     }
+}
+
+private struct CarousalStyleKey: EnvironmentKey {
+    static let defaultValue: CarousalStyle = CarousalStyle()
+}
+
+public struct CarousalStyle {
+    var indicatorStyle: IndicatorStyle?
+    var scaleAnimationStyle: ScaleAnimationStyle?
     
-    var scaleAnimationStyle: ScaleAnimationStyle? {
-        get { self[ScaleAnimationStyleKey.self] }
-        set { self[ScaleAnimationStyleKey.self] = newValue }
+    public init(indicatorStyle: IndicatorStyle? = nil, scaleAnimationStyle: ScaleAnimationStyle? = nil) {
+        self.indicatorStyle = indicatorStyle
+        self.scaleAnimationStyle = scaleAnimationStyle
     }
-}
-
-private struct IndicatorStyleKey: EnvironmentKey {
-    static let defaultValue: IndicatorStyle? = nil
-}
-
-private struct ScaleAnimationStyleKey: EnvironmentKey {
-    static let defaultValue: ScaleAnimationStyle? = nil
 }
 
 public struct ScaleAnimationStyle {
