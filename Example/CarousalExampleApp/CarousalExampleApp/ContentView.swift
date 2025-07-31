@@ -14,7 +14,8 @@ struct ContentView: View {
     
     var body: some View {
         CarousalView(configuration: CarousalConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
-            .indicatorEnabled(backgroundStyle: .capsule())
+//            .indicatorEnabled() // TODO: Fix environment key issues
+            .scaleEffectEnabled()
             .frame(maxWidth: .infinity)
     }
 }

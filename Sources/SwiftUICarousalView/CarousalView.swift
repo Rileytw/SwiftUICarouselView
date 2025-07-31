@@ -9,6 +9,7 @@ import SwiftUI
 
 public struct CarousalView: View {
     @Environment(\.indicatorStyle) private var indicatorStyle
+    @Environment(\.scaleAnimationStyle) private var scaleAnimationStyle
     
     @State private var configuration: CarousalConfiguration
     @State private var dataSource: [CarousalItem]
@@ -45,9 +46,13 @@ public extension CarousalView {
     func indicatorEnabled<N: View, S: View>(normal: N, selected: S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
         self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle))
     }
-    
+   
     func indicatorEnabled<N: View, S: View>(@ViewBuilder normal: () -> N, @ViewBuilder selected: () -> S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
         self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle))
+    }
+    
+    func scaleEffectEnabled(_ style: ScaleAnimationStyle = .default) -> some View {
+        self.environment(\.scaleAnimationStyle, style)
     }
 }
 
@@ -59,9 +64,16 @@ private extension CarousalView {
             let itemWidth = configuration.itemWidth
             
             HStack(spacing: configuration.itemPadding) {
-                ForEach(dataSource) { item in
-                    item.view
-                        .frame(width: itemWidth)
+                ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
+                    if let scaleAnimationStyle = scaleAnimationStyle {
+                        item.view
+                            .frame(width: itemWidth)
+                            .scaleEffect(index == currentIndex ? 1.0 : scaleAnimationStyle.unselectedScale)
+                            .animation(.easeInOut(duration: scaleAnimationStyle.animationDuration), value: currentIndex)
+                    } else {
+                        item.view
+                            .frame(width: itemWidth)
+                    }
                 }
             }
             .offset(x: offset + dragOffset)
