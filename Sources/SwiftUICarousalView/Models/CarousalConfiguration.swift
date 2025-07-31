@@ -14,14 +14,14 @@ public struct CarousalConfiguration {
     let itemPadding: CGFloat
     let verticalPadding: CGFloat
     let backgroundColor: Color
-    let pageControlItem: PageControlItem?
+    let indicatorStyle: IndicatorStyle?
     
-    public init(itemWidth: CGFloat, itemHeight: CGFloat, itemPadding: CGFloat = 16, verticalPadding: CGFloat = 16, backgroundColor: Color = .clear, pageControlItem: PageControlItem? = .default(.gray, .blue)) {
+    public init(itemWidth: CGFloat, itemHeight: CGFloat, itemPadding: CGFloat = 16, verticalPadding: CGFloat = 16, backgroundColor: Color = .clear, indicatorStyle: IndicatorStyle? = .default(.gray, .blue)) {
         self.itemWidth = itemWidth
         self.itemHeight = itemHeight
         self.itemPadding = itemPadding
         self.verticalPadding = verticalPadding
         self.backgroundColor = backgroundColor
-        self.pageControlItem = pageControlItem
+        self.indicatorStyle = indicatorStyle
     }
 }

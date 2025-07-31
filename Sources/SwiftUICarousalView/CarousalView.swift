@@ -24,8 +24,8 @@ public struct CarousalView: View {
             carousalView
                 .frame(width: .infinity, height: configuration.itemHeight)
             
-            if let pageControlItem = configuration.pageControlItem {
-                PageControlView(currentIndex: $currentIndex, dataSource: $dataSource, pageControlItem: pageControlItem)
+            if let indicatorStyle = configuration.indicatorStyle {
+                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicatorStyle: indicatorStyle)
             }
         }
         .background(configuration.backgroundColor)

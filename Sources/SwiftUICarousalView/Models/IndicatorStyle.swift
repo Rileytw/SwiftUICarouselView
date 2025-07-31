@@ -1,5 +1,5 @@
 //
-//  PageControlItem.swift
+//  IndicatorStyle.swift
 //  SwiftUICarousalView
 //
 //  Created by Lei on 2025/7/30.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-public enum PageControlItem {
+public enum IndicatorStyle {
     case `default`(Color, Color)
-    case custom(PageControlCustomViews)
+    case custom(indicatorCustomViews)
 }
 
-public struct PageControlCustomViews {
+public struct indicatorCustomViews {
     let normal: AnyView
     let selected: AnyView
     

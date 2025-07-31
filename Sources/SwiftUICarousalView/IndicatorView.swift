@@ -1,5 +1,5 @@
 //
-//  PageControlView.swift
+//  IndicatorView.swift
 //  SwiftUICarousalView
 //
 //  Created by Lei on 2025/7/30.
@@ -7,25 +7,25 @@
 
 import SwiftUI
 
-struct PageControlView: View {
+struct IndicatorView: View {
     @Binding var currentIndex: Int
     @Binding var dataSource: [CarousalItem]
-    var pageControlItem: PageControlItem
+    var indicatorStyle: IndicatorStyle
     
     var body: some View {
         HStack {
             ForEach(dataSource.indices, id: \.self) { index in
-                pageControlItemView(isSelected: index == currentIndex)
+                indicatorView(isSelected: index == currentIndex)
             }
         }
     }
 }
 
 // MARK: - Private Methods
-private extension PageControlView {
+private extension IndicatorView {
     @ViewBuilder
-    func pageControlItemView(isSelected: Bool) -> some View {
-        switch pageControlItem {
+    func indicatorView(isSelected: Bool) -> some View {
+        switch indicatorStyle {
         case .default(let normal, let selected):
             Circle()
                 .fill(isSelected ? selected : normal)
