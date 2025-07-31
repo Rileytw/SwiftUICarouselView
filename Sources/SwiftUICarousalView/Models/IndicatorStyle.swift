@@ -8,8 +8,8 @@
 import SwiftUI
 
 public enum IndicatorStyle {
-    case `default`(Color, Color)
-    case custom(IndicatorCustomViews)
+    case `default`(Color, Color, IndicatorBackgroundStyle?)
+    case custom(IndicatorCustomViews, IndicatorBackgroundStyle?)
 }
 
 public struct IndicatorCustomViews {

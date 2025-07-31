@@ -38,16 +38,16 @@ public struct CarousalView: View {
 
 // MARK: - Public Methods
 public extension CarousalView {
-    func indicatorEnabled(_ normalColor: Color = .gray, _ selectedColor: Color = .blue) -> some View {
-        self.environment(\.indicatorStyle, .default(normalColor, selectedColor))
+    func indicatorEnabled(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
+        self.environment(\.indicatorStyle, .default(normalColor, selectedColor, backgroundStyle))
     }
     
-    func indicatorEnabled<N: View, S: View>(normal: N, selected: S) -> some View {
-        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected)))
+    func indicatorEnabled<N: View, S: View>(normal: N, selected: S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
+        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle))
     }
     
-    func indicatorEnabled<N: View, S: View>(@ViewBuilder normal: () -> N, @ViewBuilder selected: () -> S) -> some View {
-        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected)))
+    func indicatorEnabled<N: View, S: View>(@ViewBuilder normal: () -> N, @ViewBuilder selected: () -> S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
+        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle))
     }
 }
 
