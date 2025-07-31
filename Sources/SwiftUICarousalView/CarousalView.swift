@@ -8,6 +8,8 @@
 import SwiftUI
 
 public struct CarousalView: View {
+    @Environment(\.indicatorStyle) private var indicatorStyle
+    
     @State private var configuration: CarousalConfiguration
     @State private var dataSource: [CarousalItem]
     @State private var currentIndex: Int = 0
@@ -22,15 +24,30 @@ public struct CarousalView: View {
     public var body: some View {
         VStack(spacing: configuration.verticalPadding) {
             carousalView
-                .frame(width: .infinity, height: configuration.itemHeight)
+                .frame(maxWidth: .infinity, maxHeight: configuration.itemHeight)
             
-            if let indicatorStyle = configuration.indicatorStyle {
+            if let indicatorStyle = indicatorStyle {
                 IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicatorStyle: indicatorStyle)
             }
         }
         .background(configuration.backgroundColor)
         .padding()
         .clipped()
+    }
+}
+
+// MARK: - Public Methods
+public extension CarousalView {
+    func indicatorEnabled(_ normalColor: Color = .gray, _ selectedColor: Color = .blue) -> some View {
+        self.environment(\.indicatorStyle, .default(normalColor, selectedColor))
+    }
+    
+    func indicatorEnabled<N: View, S: View>(normal: N, selected: S) -> some View {
+        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected)))
+    }
+    
+    func indicatorEnabled<N: View, S: View>(@ViewBuilder normal: () -> N, @ViewBuilder selected: () -> S) -> some View {
+        self.environment(\.indicatorStyle, .custom(IndicatorCustomViews(normal: normal, selected: selected)))
     }
 }
 

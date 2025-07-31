@@ -9,10 +9,10 @@ import SwiftUI
 
 public enum IndicatorStyle {
     case `default`(Color, Color)
-    case custom(indicatorCustomViews)
+    case custom(IndicatorCustomViews)
 }
 
-public struct indicatorCustomViews {
+public struct IndicatorCustomViews {
     let normal: AnyView
     let selected: AnyView
     
