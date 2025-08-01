@@ -44,11 +44,6 @@
 			path = CarousalExampleAppTests;
 			sourceTree = "<group>";
 		};
-		35DBF2492E38DF50004EBDFB /* CarousalExampleAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CarousalExampleAppUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +77,6 @@
 			children = (
 				35DBF2312E38DF4F004EBDFB /* CarousalExampleApp */,
 				35DBF23F2E38DF50004EBDFB /* CarousalExampleAppTests */,
-				35DBF2492E38DF50004EBDFB /* CarousalExampleAppUITests */,
 				35DBF2302E38DF4F004EBDFB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -158,9 +152,6 @@
 			);
 			dependencies = (
 				35DBF2482E38DF50004EBDFB /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				35DBF2492E38DF50004EBDFB /* CarousalExampleAppUITests */,
 			);
 			name = CarousalExampleAppUITests;
 			packageProductDependencies = (
