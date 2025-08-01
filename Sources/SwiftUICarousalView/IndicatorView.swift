@@ -1,6 +1,6 @@
 //
 //  IndicatorView.swift
-//  SwiftUICarousalView
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/30.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 
 struct IndicatorView: View {
     @Binding var currentIndex: Int
-    @Binding var dataSource: [CarousalItem]
+    @Binding var dataSource: [CarouselItem]
     var indicatorStyle: IndicatorStyle
     
     var body: some View {

@@ -1,6 +1,6 @@
 //
 //  View+extension.swift
-//  SwiftUICarousalView
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/31.
 //
@@ -10,25 +10,25 @@ import SwiftUI
 // MARK: - Public Methods
 public extension View {
     func indicatorEnabled(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
-        self.transformEnvironment(\.carousalStyle) { style in
+        self.transformEnvironment(\.carouselStyle) { style in
             style.indicatorStyle = .default(normalColor, selectedColor, backgroundStyle)
         }
     }
     
     func indicatorEnabled<N: View, S: View>(normal: N, selected: S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
-        self.transformEnvironment(\.carousalStyle) { style in
+        self.transformEnvironment(\.carouselStyle) { style in
             style.indicatorStyle = .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle)
         }
     }
    
     func indicatorEnabled<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
-        self.transformEnvironment(\.carousalStyle) { style in
+        self.transformEnvironment(\.carouselStyle) { style in
             style.indicatorStyle = .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle)
         }
     }
     
     func scaleEffectEnabled(_ scaleStyle: ScaleAnimationStyle = .default) -> some View {
-        self.transformEnvironment(\.carousalStyle) { style in
+        self.transformEnvironment(\.carouselStyle) { style in
             style.scaleAnimationStyle = scaleStyle
         }
     }

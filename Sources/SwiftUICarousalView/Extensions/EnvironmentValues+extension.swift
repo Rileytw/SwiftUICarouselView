@@ -1,6 +1,6 @@
 //
 //  EnvironmentValues+extension.swift
-//  SwiftUICarousalView
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/31.
 //
@@ -8,17 +8,17 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    var carousalStyle: CarousalStyle {
-        get { self[CarousalStyleKey.self] }
-        set { self[CarousalStyleKey.self] = newValue }
+    var carouselStyle: CarouselStyle {
+        get { self[CarouselStyleKey.self] }
+        set { self[CarouselStyleKey.self] = newValue }
     }
 }
 
-private struct CarousalStyleKey: EnvironmentKey {
-    static let defaultValue: CarousalStyle = CarousalStyle()
+private struct CarouselStyleKey: EnvironmentKey {
+    static let defaultValue: CarouselStyle = CarouselStyle()
 }
 
-public struct CarousalStyle {
+public struct CarouselStyle {
     var indicatorStyle: IndicatorStyle?
     var scaleAnimationStyle: ScaleAnimationStyle?
     

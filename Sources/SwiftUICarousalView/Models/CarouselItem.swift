@@ -1,13 +1,13 @@
 //
-//  CarousalItem.swift
-//  SwiftUICarousalView
+//  CarouselItem.swift
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/29.
 //
 
 import SwiftUI
 
-public struct CarousalItem: Identifiable {
+public struct CarouselItem: Identifiable {
     public let id = UUID()
     public let view: AnyView
     

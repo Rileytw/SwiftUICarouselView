@@ -1,32 +1,32 @@
 //
-//  CarousalView.swift
-//  SwiftUICarousalView
+//  CarouselView.swift
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/29.
 //
 
 import SwiftUI
 
-public struct CarousalView: View {
-    @Environment(\.carousalStyle) private var carousalStyle
+public struct CarouselView: View {
+    @Environment(\.carouselStyle) private var carouselStyle
     
-    @State private var configuration: CarousalConfiguration
-    @State private var dataSource: [CarousalItem]
+    @State private var configuration: CarouselConfiguration
+    @State private var dataSource: [CarouselItem]
     @State private var currentIndex: Int = 0
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     
-    public init(configuration: CarousalConfiguration, dataSource: [CarousalItem]) {
+    public init(configuration: CarouselConfiguration, dataSource: [CarouselItem]) {
         self.configuration = configuration
         self.dataSource = dataSource
     }
     
     public var body: some View {
         VStack(spacing: configuration.verticalPadding) {
-            carousalView
+            carouselView
                 .frame(maxWidth: .infinity, maxHeight: configuration.itemHeight)
             
-            if let indicatorStyle = carousalStyle.indicatorStyle {
+            if let indicatorStyle = carouselStyle.indicatorStyle {
                 IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicatorStyle: indicatorStyle)
             }
         }
@@ -37,15 +37,15 @@ public struct CarousalView: View {
 }
 
 // MARK: - Private Methods
-private extension CarousalView {
+private extension CarouselView {
     @ViewBuilder
-    var carousalView: some View {
+    var carouselView: some View {
         GeometryReader { geometry in
             let itemWidth = configuration.itemWidth
             
             HStack(spacing: configuration.itemPadding) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    if let scaleAnimationStyle = carousalStyle.scaleAnimationStyle {
+                    if let scaleAnimationStyle = carouselStyle.scaleAnimationStyle {
                         item.view
                             .frame(width: itemWidth)
                             .scaleEffect(index == currentIndex ? 1.0 : scaleAnimationStyle.unselectedScale)

@@ -1,6 +1,6 @@
 //
 //  IndicatorBackgroundModifier.swift
-//  SwiftUICarousalView
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/31.
 //
