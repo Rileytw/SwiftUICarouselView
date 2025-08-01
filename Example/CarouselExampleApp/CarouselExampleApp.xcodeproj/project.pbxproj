@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		35DBF25B2E38DF79004EBDFB /* SwiftUICarousalView in Frameworks */ = {isa = PBXBuildFile; productRef = 35DBF25A2E38DF79004EBDFB /* SwiftUICarousalView */; };
+		3500FEC92E3CCD3A00650CC5 /* SwiftUICarouselView in Frameworks */ = {isa = PBXBuildFile; productRef = 3500FEC82E3CCD3A00650CC5 /* SwiftUICarouselView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35DBF25B2E38DF79004EBDFB /* SwiftUICarousalView in Frameworks */,
+				3500FEC92E3CCD3A00650CC5 /* SwiftUICarouselView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,11 +72,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3500FEC72E3CCD3A00650CC5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		35DBF2262E38DF4E004EBDFB = {
 			isa = PBXGroup;
 			children = (
 				35DBF2312E38DF4F004EBDFB /* CarouselExampleApp */,
 				35DBF23F2E38DF50004EBDFB /* CarouselExampleAppTests */,
+				3500FEC72E3CCD3A00650CC5 /* Frameworks */,
 				35DBF2302E38DF4F004EBDFB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -111,7 +119,7 @@
 			);
 			name = CarouselExampleApp;
 			packageProductDependencies = (
-				35DBF25A2E38DF79004EBDFB /* SwiftUICarousalView */,
+				3500FEC82E3CCD3A00650CC5 /* SwiftUICarouselView */,
 			);
 			productName = CarousalExampleApp;
 			productReference = 35DBF22F2E38DF4F004EBDFB /* CarouselExampleApp.app */;
@@ -567,9 +575,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		35DBF25A2E38DF79004EBDFB /* SwiftUICarousalView */ = {
+		3500FEC82E3CCD3A00650CC5 /* SwiftUICarouselView */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUICarousalView;
+			package = 35DBF2592E38DF79004EBDFB /* XCLocalSwiftPackageReference "../../../SwiftUICarousalView" */;
+			productName = SwiftUICarouselView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import SwiftUICarousalView
+import SwiftUICarouselView
 
 struct ContentView: View {
     private let itemWidth: CGFloat = 300
     private let itemHeight: CGFloat = 200
     
     var body: some View {
-        CarousalView(configuration: CarousalConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
+        CarouselView(configuration: CarouselConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
             .scaleEffectEnabled()
             .indicatorEnabled()
             .frame(maxWidth: .infinity)
@@ -22,14 +22,14 @@ struct ContentView: View {
 
 // MARK: - Private Methods
 private extension ContentView {
-    var carousalItems: [CarousalItem] {
-        return [CarousalItem(content: {
+    var carousalItems: [CarouselItem] {
+        return [CarouselItem(content: {
             createCard("Item 1")
-        }), CarousalItem(content: {
+        }), CarouselItem(content: {
             createCard("Item 2")
-        }), CarousalItem(content: {
+        }), CarouselItem(content: {
             createCard("Item 3")
-        }), CarousalItem(content: {
+        }), CarouselItem(content: {
             createCard("Item 4")
         })]
     }

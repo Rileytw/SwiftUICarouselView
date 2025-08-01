@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftUICarousalView",
+    name: "SwiftUICarouselView",
     platforms: [
         .iOS(.v14),
         .watchOS(.v7)
@@ -12,17 +12,17 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "SwiftUICarousalView",
-            targets: ["SwiftUICarousalView"]),
+            name: "SwiftUICarouselView",
+            targets: ["SwiftUICarouselView"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "SwiftUICarousalView"),
+            name: "SwiftUICarouselView"),
         .testTarget(
-            name: "SwiftUICarousalViewTests",
-            dependencies: ["SwiftUICarousalView"]
+            name: "SwiftUICarouselViewTests",
+            dependencies: ["SwiftUICarouselView"]
         ),
     ]
 )
