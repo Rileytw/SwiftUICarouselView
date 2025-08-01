@@ -20,22 +20,12 @@ private struct CarouselStyleKey: EnvironmentKey {
 
 public struct CarouselStyle {
     var indicator: Indicator?
-    var scaleAnimationStyle: ScaleAnimationStyle?
+    var scaleAnimation: ScaleAnimation?
     
-    public init(indicator: Indicator? = nil, scaleAnimationStyle: ScaleAnimationStyle? = nil) {
+    public init(indicator: Indicator? = nil, scaleAnimation: ScaleAnimation? = nil) {
         self.indicator = indicator
-        self.scaleAnimationStyle = scaleAnimationStyle
+        self.scaleAnimation = scaleAnimation
     }
 }
 
-public struct ScaleAnimationStyle {
-    public let unselectedScale: CGFloat
-    public let animationDuration: Double
-    
-    public init(unselectedScale: CGFloat = 0.8, animationDuration: Double = 0.3, ) {
-        self.unselectedScale = unselectedScale
-        self.animationDuration = animationDuration
-    }
-    
-    public static let `default` = ScaleAnimationStyle()
-}
+

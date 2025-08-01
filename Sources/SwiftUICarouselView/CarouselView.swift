@@ -45,11 +45,11 @@ private extension CarouselView {
             
             HStack(spacing: layout.itemPadding) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    if let scaleAnimationStyle = carouselStyle.scaleAnimationStyle {
+                    if let scaleAnimation = carouselStyle.scaleAnimation {
                         item.view
                             .frame(width: itemWidth)
-                            .scaleEffect(index == currentIndex ? 1.0 : scaleAnimationStyle.unselectedScale)
-                            .animation(.easeInOut(duration: scaleAnimationStyle.animationDuration), value: currentIndex)
+                            .scaleEffect(index == currentIndex ? 1.0 : scaleAnimation.unselectedScale)
+                            .animation(scaleAnimation.animation, value: currentIndex)
                     } else {
                         item.view
                             .frame(width: itemWidth)

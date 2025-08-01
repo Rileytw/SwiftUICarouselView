@@ -27,9 +27,9 @@ public extension View {
         }
     }
     
-    func scaleEffectEnabled(_ scaleStyle: ScaleAnimationStyle = .default) -> some View {
+    func scaleAnimation(_ scaleAnimation: ScaleAnimation = .default) -> some View {
         self.transformEnvironment(\.carouselStyle) { style in
-            style.scaleAnimationStyle = scaleStyle
+            style.scaleAnimation = scaleAnimation
         }
     }
 }
