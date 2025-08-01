@@ -13,7 +13,7 @@ struct ContentView: View {
     private let itemHeight: CGFloat = 200
     
     var body: some View {
-        CarouselView(configuration: CarouselConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
+        CarouselView(layout: LayoutConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
             .scaleEffectEnabled()
             .indicatorEnabled()
             .frame(maxWidth: .infinity)
