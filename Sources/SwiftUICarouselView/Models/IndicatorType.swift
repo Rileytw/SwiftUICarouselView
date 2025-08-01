@@ -1,5 +1,5 @@
 //
-//  IndicatorStyle.swift
+//  IndicatorType.swift
 //  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/30.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-public enum IndicatorStyle {
-    case `default`(Color, Color, IndicatorBackgroundStyle?)
-    case custom(IndicatorCustomViews, IndicatorBackgroundStyle?)
+public enum IndicatorType {
+    case `default`(Color, Color)
+    case custom(IndicatorViews)
 }
 
-public struct IndicatorCustomViews {
+public struct IndicatorViews {
     let normal: AnyView
     let selected: AnyView
     

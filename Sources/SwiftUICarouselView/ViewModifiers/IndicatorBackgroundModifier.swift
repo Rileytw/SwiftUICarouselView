@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct IndicatorBackgroundModifier: ViewModifier {
-    let style: IndicatorBackgroundStyle?
+    let style: IndicatorBackground?
     
     public func body(content: Content) -> some View {
         if let style = style {

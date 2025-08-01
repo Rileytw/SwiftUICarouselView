@@ -10,7 +10,7 @@ import SwiftUI
 struct IndicatorView: View {
     @Binding var currentIndex: Int
     @Binding var dataSource: [CarouselItem]
-    var indicatorStyle: IndicatorStyle
+    var indicator: Indicator
     
     var body: some View {
         HStack {
@@ -18,29 +18,20 @@ struct IndicatorView: View {
                 indicatorView(isSelected: index == currentIndex)
             }
         }
-        .indicatorBackground(backgroundStyle)
+        .indicatorBackground(indicator.background)
     }
 }
 
 // MARK: - Private Methods
 private extension IndicatorView {
-    var backgroundStyle: IndicatorBackgroundStyle? {
-        switch indicatorStyle {
-        case .default(_, _, let background):
-            return background
-        case .custom(_, let background):
-            return background
-        }
-    }
-    
     @ViewBuilder
     func indicatorView(isSelected: Bool) -> some View {
-        switch indicatorStyle {
-        case .default(let normal, let selected, _):
+        switch indicator.type {
+        case .default(let normal, let selected):
             Circle()
                 .fill(isSelected ? selected : normal)
                 .frame(width: 8, height: 8)
-        case .custom(let provider, _):
+        case .custom(let provider):
             isSelected ? provider.selected : provider.normal
         }
     }

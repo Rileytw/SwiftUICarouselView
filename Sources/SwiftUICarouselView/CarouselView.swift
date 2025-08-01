@@ -26,8 +26,8 @@ public struct CarouselView: View {
             carouselView
                 .frame(maxWidth: .infinity, maxHeight: layout.itemHeight)
             
-            if let indicatorStyle = carouselStyle.indicatorStyle {
-                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicatorStyle: indicatorStyle)
+            if let indicator = carouselStyle.indicator {
+                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicator: indicator)
             }
         }
         .background(layout.backgroundColor)

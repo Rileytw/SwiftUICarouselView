@@ -19,11 +19,11 @@ private struct CarouselStyleKey: EnvironmentKey {
 }
 
 public struct CarouselStyle {
-    var indicatorStyle: IndicatorStyle?
+    var indicator: Indicator?
     var scaleAnimationStyle: ScaleAnimationStyle?
     
-    public init(indicatorStyle: IndicatorStyle? = nil, scaleAnimationStyle: ScaleAnimationStyle? = nil) {
-        self.indicatorStyle = indicatorStyle
+    public init(indicator: Indicator? = nil, scaleAnimationStyle: ScaleAnimationStyle? = nil) {
+        self.indicator = indicator
         self.scaleAnimationStyle = scaleAnimationStyle
     }
 }

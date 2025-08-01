@@ -9,21 +9,21 @@ import SwiftUI
 
 // MARK: - Public Methods
 public extension View {
-    func indicatorEnabled(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
+    func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carouselStyle) { style in
-            style.indicatorStyle = .default(normalColor, selectedColor, backgroundStyle)
+            style.indicator = Indicator(type: .default(normalColor, selectedColor), background: background)
         }
     }
     
-    func indicatorEnabled<N: View, S: View>(normal: N, selected: S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
+    func indicator<N: View, S: View>(normal: N, selected: S, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carouselStyle) { style in
-            style.indicatorStyle = .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle)
+            style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), background: background)
         }
     }
    
-    func indicatorEnabled<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, backgroundStyle: IndicatorBackgroundStyle? = nil) -> some View {
+    func indicator<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carouselStyle) { style in
-            style.indicatorStyle = .custom(IndicatorCustomViews(normal: normal, selected: selected), backgroundStyle)
+            style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), background: background)
         }
     }
     
@@ -36,7 +36,7 @@ public extension View {
 
 // MARK: - Internal Methods
 extension View {
-    func indicatorBackground(_ style: IndicatorBackgroundStyle?) -> some View {
+    func indicatorBackground(_ style: IndicatorBackground?) -> some View {
         modifier(IndicatorBackgroundModifier(style: style))
     }
     
