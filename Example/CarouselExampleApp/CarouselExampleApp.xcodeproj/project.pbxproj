@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3500FEC92E3CCD3A00650CC5 /* SwiftUICarouselView in Frameworks */ = {isa = PBXBuildFile; productRef = 3500FEC82E3CCD3A00650CC5 /* SwiftUICarouselView */; };
+		359AAF402E3CCFA800A53FFE /* SwiftUICarouselView in Frameworks */ = {isa = PBXBuildFile; productRef = 359AAF3F2E3CCFA800A53FFE /* SwiftUICarouselView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3500FEC92E3CCD3A00650CC5 /* SwiftUICarouselView in Frameworks */,
+				359AAF402E3CCFA800A53FFE /* SwiftUICarouselView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +119,7 @@
 			);
 			name = CarouselExampleApp;
 			packageProductDependencies = (
-				3500FEC82E3CCD3A00650CC5 /* SwiftUICarouselView */,
+				359AAF3F2E3CCFA800A53FFE /* SwiftUICarouselView */,
 			);
 			productName = CarousalExampleApp;
 			productReference = 35DBF22F2E38DF4F004EBDFB /* CarouselExampleApp.app */;
@@ -201,7 +201,7 @@
 			mainGroup = 35DBF2262E38DF4E004EBDFB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				35DBF2592E38DF79004EBDFB /* XCLocalSwiftPackageReference "../../../SwiftUICarousalView" */,
+				359AAF3E2E3CCFA800A53FFE /* XCLocalSwiftPackageReference "../../../SwiftUICarouselView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 35DBF2302E38DF4F004EBDFB /* Products */;
@@ -568,16 +568,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		35DBF2592E38DF79004EBDFB /* XCLocalSwiftPackageReference "../../../SwiftUICarousalView" */ = {
+		359AAF3E2E3CCFA800A53FFE /* XCLocalSwiftPackageReference "../../../SwiftUICarouselView" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../SwiftUICarousalView;
+			relativePath = ../../../SwiftUICarouselView;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3500FEC82E3CCD3A00650CC5 /* SwiftUICarouselView */ = {
+		359AAF3F2E3CCFA800A53FFE /* SwiftUICarouselView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 35DBF2592E38DF79004EBDFB /* XCLocalSwiftPackageReference "../../../SwiftUICarousalView" */;
 			productName = SwiftUICarouselView;
 		};
 /* End XCSwiftPackageProductDependency section */
