@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct CarouselView: View {
-    @Environment(\.carouselStyle) private var carouselStyle
+    @Environment(\.carousel) private var carousel
     
     @State private var layout: LayoutConfiguration
     @State private var dataSource: [CarouselItem]
@@ -26,7 +26,7 @@ public struct CarouselView: View {
             carouselView
                 .frame(maxWidth: .infinity, maxHeight: layout.itemHeight)
             
-            if let indicator = carouselStyle.indicator {
+            if let indicator = carousel.indicator {
                 IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicator: indicator)
             }
         }
@@ -45,7 +45,7 @@ private extension CarouselView {
             
             HStack(spacing: layout.itemPadding) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    if let scaleAnimation = carouselStyle.scaleAnimation {
+                    if let scaleAnimation = carousel.scaleAnimation {
                         item.view
                             .frame(width: itemWidth)
                             .scaleEffect(index == currentIndex ? 1.0 : scaleAnimation.unselectedScale)

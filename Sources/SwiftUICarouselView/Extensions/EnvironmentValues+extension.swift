@@ -8,17 +8,17 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    var carouselStyle: CarouselStyle {
-        get { self[CarouselStyleKey.self] }
-        set { self[CarouselStyleKey.self] = newValue }
+    var carousel: Carousel {
+        get { self[CarouselKey.self] }
+        set { self[CarouselKey.self] = newValue }
     }
 }
 
-private struct CarouselStyleKey: EnvironmentKey {
-    static let defaultValue: CarouselStyle = CarouselStyle()
+private struct CarouselKey: EnvironmentKey {
+    static let defaultValue: Carousel = Carousel()
 }
 
-public struct CarouselStyle {
+public struct Carousel {
     var indicator: Indicator?
     var scaleAnimation: ScaleAnimation?
     
