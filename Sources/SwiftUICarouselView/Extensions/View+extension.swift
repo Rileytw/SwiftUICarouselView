@@ -9,21 +9,21 @@ import SwiftUI
 
 // MARK: - Public Methods
 public extension View {
-    func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, background: IndicatorBackground? = nil) -> some View {
+    func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, topPadding: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
-            style.indicator = Indicator(type: .default(normalColor, selectedColor), background: background)
+            style.indicator = Indicator(type: .default(normalColor, selectedColor), topPadding: topPadding, background: background)
         }
     }
     
-    func indicator<N: View, S: View>(normal: N, selected: S, background: IndicatorBackground? = nil) -> some View {
+    func indicator<N: View, S: View>(normal: N, selected: S, topPadding: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
-            style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), background: background)
+            style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), topPadding: topPadding, background: background)
         }
     }
    
-    func indicator<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, background: IndicatorBackground? = nil) -> some View {
+    func indicator<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, topPadding: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
-            style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), background: background)
+            style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), topPadding: topPadding, background: background)
         }
     }
     
