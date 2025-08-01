@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  CarousalExampleApp
+//  CarouselExampleApp
 //
 //  Created by Lei on 2025/7/29.
 //
