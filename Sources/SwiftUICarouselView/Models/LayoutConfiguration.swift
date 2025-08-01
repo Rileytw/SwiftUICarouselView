@@ -1,6 +1,6 @@
 //
-//  CarousalConfiguration.swift
-//  SwiftUICarousalView
+//  LayoutConfiguration.swift
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/29.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public struct CarousalConfiguration {
+public struct LayoutConfiguration {
     let itemWidth: CGFloat
     let itemHeight: CGFloat
     let itemPadding: CGFloat

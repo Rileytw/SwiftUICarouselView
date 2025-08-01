@@ -1,6 +1,6 @@
 //
 //  IndicatorBackgroundModifier.swift
-//  SwiftUICarousalView
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/31.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct IndicatorBackgroundModifier: ViewModifier {
-    let style: IndicatorBackgroundStyle?
+    let style: IndicatorBackground?
     
     public func body(content: Content) -> some View {
         if let style = style {

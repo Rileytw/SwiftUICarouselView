@@ -1,35 +1,35 @@
 //
 //  ContentView.swift
-//  CarousalExampleApp
+//  CarouselExampleApp
 //
 //  Created by Lei on 2025/7/29.
 //
 
 import SwiftUI
-import SwiftUICarousalView
+import SwiftUICarouselView
 
 struct ContentView: View {
     private let itemWidth: CGFloat = 300
     private let itemHeight: CGFloat = 200
     
     var body: some View {
-        CarousalView(configuration: CarousalConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
-            .scaleEffectEnabled()
-            .indicatorEnabled()
+        CarouselView(layout: LayoutConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
+            .scaleAnimation()
+            .indicator()
             .frame(maxWidth: .infinity)
     }
 }
 
 // MARK: - Private Methods
 private extension ContentView {
-    var carousalItems: [CarousalItem] {
-        return [CarousalItem(content: {
+    var carousalItems: [CarouselItem] {
+        return [CarouselItem(content: {
             createCard("Item 1")
-        }), CarousalItem(content: {
+        }), CarouselItem(content: {
             createCard("Item 2")
-        }), CarousalItem(content: {
+        }), CarouselItem(content: {
             createCard("Item 3")
-        }), CarousalItem(content: {
+        }), CarouselItem(content: {
             createCard("Item 4")
         })]
     }

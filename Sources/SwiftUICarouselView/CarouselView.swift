@@ -1,55 +1,55 @@
 //
-//  CarousalView.swift
-//  SwiftUICarousalView
+//  CarouselView.swift
+//  SwiftUICarouselView
 //
 //  Created by Lei on 2025/7/29.
 //
 
 import SwiftUI
 
-public struct CarousalView: View {
-    @Environment(\.carousalStyle) private var carousalStyle
+public struct CarouselView: View {
+    @Environment(\.carousel) private var carousel
     
-    @State private var configuration: CarousalConfiguration
-    @State private var dataSource: [CarousalItem]
+    @State private var layout: LayoutConfiguration
+    @State private var dataSource: [CarouselItem]
     @State private var currentIndex: Int = 0
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     
-    public init(configuration: CarousalConfiguration, dataSource: [CarousalItem]) {
-        self.configuration = configuration
+    public init(layout configuration: LayoutConfiguration, dataSource: [CarouselItem]) {
+        self.layout = configuration
         self.dataSource = dataSource
     }
     
     public var body: some View {
-        VStack(spacing: configuration.verticalPadding) {
-            carousalView
-                .frame(maxWidth: .infinity, maxHeight: configuration.itemHeight)
+        VStack(spacing: layout.verticalPadding) {
+            carouselView
+                .frame(maxWidth: .infinity, maxHeight: layout.itemHeight)
             
-            if let indicatorStyle = carousalStyle.indicatorStyle {
-                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicatorStyle: indicatorStyle)
+            if let indicator = carousel.indicator {
+                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicator: indicator)
             }
         }
-        .background(configuration.backgroundColor)
+        .background(layout.backgroundColor)
         .padding()
         .clipped()
     }
 }
 
 // MARK: - Private Methods
-private extension CarousalView {
+private extension CarouselView {
     @ViewBuilder
-    var carousalView: some View {
+    var carouselView: some View {
         GeometryReader { geometry in
-            let itemWidth = configuration.itemWidth
+            let itemWidth = layout.itemWidth
             
-            HStack(spacing: configuration.itemPadding) {
+            HStack(spacing: layout.itemPadding) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    if let scaleAnimationStyle = carousalStyle.scaleAnimationStyle {
+                    if let scaleAnimation = carousel.scaleAnimation {
                         item.view
                             .frame(width: itemWidth)
-                            .scaleEffect(index == currentIndex ? 1.0 : scaleAnimationStyle.unselectedScale)
-                            .animation(.easeInOut(duration: scaleAnimationStyle.animationDuration), value: currentIndex)
+                            .scaleEffect(index == currentIndex ? 1.0 : scaleAnimation.unselectedScale)
+                            .animation(scaleAnimation.animation, value: currentIndex)
                     } else {
                         item.view
                             .frame(width: itemWidth)
@@ -71,11 +71,11 @@ private extension CarousalView {
                             return
                         }
                         
-                        handleDragEnd(value, itemWidth: itemWidth, spacing: configuration.itemPadding, parentViewWidth: geometry.size.width)
+                        handleDragEnd(value, itemWidth: itemWidth, spacing: layout.itemPadding, parentViewWidth: geometry.size.width)
                     }
             )
             .onAppear {
-                offset = -(itemWidth + configuration.itemPadding) * CGFloat(currentIndex) + (geometry.size.width - itemWidth) / 2
+                offset = -(itemWidth + layout.itemPadding) * CGFloat(currentIndex) + (geometry.size.width - itemWidth) / 2
             }
         }
     }

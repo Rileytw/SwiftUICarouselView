@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		35DBF25B2E38DF79004EBDFB /* SwiftUICarousalView in Frameworks */ = {isa = PBXBuildFile; productRef = 35DBF25A2E38DF79004EBDFB /* SwiftUICarousalView */; };
+		359AAF402E3CCFA800A53FFE /* SwiftUICarouselView in Frameworks */ = {isa = PBXBuildFile; productRef = 359AAF3F2E3CCFA800A53FFE /* SwiftUICarouselView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,25 +28,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		35DBF22F2E38DF4F004EBDFB /* CarousalExampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarousalExampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		35DBF23C2E38DF50004EBDFB /* CarousalExampleAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarousalExampleAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		35DBF2462E38DF50004EBDFB /* CarousalExampleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarousalExampleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		35DBF22F2E38DF4F004EBDFB /* CarouselExampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarouselExampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		35DBF23C2E38DF50004EBDFB /* CarouselExampleAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarouselExampleAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		35DBF2462E38DF50004EBDFB /* CarouselExampleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarouselExampleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		35DBF2312E38DF4F004EBDFB /* CarousalExampleApp */ = {
+		35DBF2312E38DF4F004EBDFB /* CarouselExampleApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CarousalExampleApp;
+			path = CarouselExampleApp;
 			sourceTree = "<group>";
 		};
-		35DBF23F2E38DF50004EBDFB /* CarousalExampleAppTests */ = {
+		35DBF23F2E38DF50004EBDFB /* CarouselExampleAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CarousalExampleAppTests;
-			sourceTree = "<group>";
-		};
-		35DBF2492E38DF50004EBDFB /* CarousalExampleAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CarousalExampleAppUITests;
+			path = CarouselExampleAppTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -56,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35DBF25B2E38DF79004EBDFB /* SwiftUICarousalView in Frameworks */,
+				359AAF402E3CCFA800A53FFE /* SwiftUICarouselView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,12 +72,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3500FEC72E3CCD3A00650CC5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		35DBF2262E38DF4E004EBDFB = {
 			isa = PBXGroup;
 			children = (
-				35DBF2312E38DF4F004EBDFB /* CarousalExampleApp */,
-				35DBF23F2E38DF50004EBDFB /* CarousalExampleAppTests */,
-				35DBF2492E38DF50004EBDFB /* CarousalExampleAppUITests */,
+				35DBF2312E38DF4F004EBDFB /* CarouselExampleApp */,
+				35DBF23F2E38DF50004EBDFB /* CarouselExampleAppTests */,
+				3500FEC72E3CCD3A00650CC5 /* Frameworks */,
 				35DBF2302E38DF4F004EBDFB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,9 +92,9 @@
 		35DBF2302E38DF4F004EBDFB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				35DBF22F2E38DF4F004EBDFB /* CarousalExampleApp.app */,
-				35DBF23C2E38DF50004EBDFB /* CarousalExampleAppTests.xctest */,
-				35DBF2462E38DF50004EBDFB /* CarousalExampleAppUITests.xctest */,
+				35DBF22F2E38DF4F004EBDFB /* CarouselExampleApp.app */,
+				35DBF23C2E38DF50004EBDFB /* CarouselExampleAppTests.xctest */,
+				35DBF2462E38DF50004EBDFB /* CarouselExampleAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,9 +102,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		35DBF22E2E38DF4F004EBDFB /* CarousalExampleApp */ = {
+		35DBF22E2E38DF4F004EBDFB /* CarouselExampleApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 35DBF2502E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarousalExampleApp" */;
+			buildConfigurationList = 35DBF2502E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarouselExampleApp" */;
 			buildPhases = (
 				35DBF22B2E38DF4F004EBDFB /* Sources */,
 				35DBF22C2E38DF4F004EBDFB /* Frameworks */,
@@ -113,19 +115,19 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				35DBF2312E38DF4F004EBDFB /* CarousalExampleApp */,
+				35DBF2312E38DF4F004EBDFB /* CarouselExampleApp */,
 			);
-			name = CarousalExampleApp;
+			name = CarouselExampleApp;
 			packageProductDependencies = (
-				35DBF25A2E38DF79004EBDFB /* SwiftUICarousalView */,
+				359AAF3F2E3CCFA800A53FFE /* SwiftUICarouselView */,
 			);
 			productName = CarousalExampleApp;
-			productReference = 35DBF22F2E38DF4F004EBDFB /* CarousalExampleApp.app */;
+			productReference = 35DBF22F2E38DF4F004EBDFB /* CarouselExampleApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		35DBF23B2E38DF50004EBDFB /* CarousalExampleAppTests */ = {
+		35DBF23B2E38DF50004EBDFB /* CarouselExampleAppTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 35DBF2532E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarousalExampleAppTests" */;
+			buildConfigurationList = 35DBF2532E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarouselExampleAppTests" */;
 			buildPhases = (
 				35DBF2382E38DF50004EBDFB /* Sources */,
 				35DBF2392E38DF50004EBDFB /* Frameworks */,
@@ -137,18 +139,18 @@
 				35DBF23E2E38DF50004EBDFB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				35DBF23F2E38DF50004EBDFB /* CarousalExampleAppTests */,
+				35DBF23F2E38DF50004EBDFB /* CarouselExampleAppTests */,
 			);
-			name = CarousalExampleAppTests;
+			name = CarouselExampleAppTests;
 			packageProductDependencies = (
 			);
 			productName = CarousalExampleAppTests;
-			productReference = 35DBF23C2E38DF50004EBDFB /* CarousalExampleAppTests.xctest */;
+			productReference = 35DBF23C2E38DF50004EBDFB /* CarouselExampleAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		35DBF2452E38DF50004EBDFB /* CarousalExampleAppUITests */ = {
+		35DBF2452E38DF50004EBDFB /* CarouselExampleAppUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 35DBF2562E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarousalExampleAppUITests" */;
+			buildConfigurationList = 35DBF2562E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarouselExampleAppUITests" */;
 			buildPhases = (
 				35DBF2422E38DF50004EBDFB /* Sources */,
 				35DBF2432E38DF50004EBDFB /* Frameworks */,
@@ -159,14 +161,11 @@
 			dependencies = (
 				35DBF2482E38DF50004EBDFB /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				35DBF2492E38DF50004EBDFB /* CarousalExampleAppUITests */,
-			);
-			name = CarousalExampleAppUITests;
+			name = CarouselExampleAppUITests;
 			packageProductDependencies = (
 			);
 			productName = CarousalExampleAppUITests;
-			productReference = 35DBF2462E38DF50004EBDFB /* CarousalExampleAppUITests.xctest */;
+			productReference = 35DBF2462E38DF50004EBDFB /* CarouselExampleAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -192,7 +191,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 35DBF22A2E38DF4E004EBDFB /* Build configuration list for PBXProject "CarousalExampleApp" */;
+			buildConfigurationList = 35DBF22A2E38DF4E004EBDFB /* Build configuration list for PBXProject "CarouselExampleApp" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -202,16 +201,16 @@
 			mainGroup = 35DBF2262E38DF4E004EBDFB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				35DBF2592E38DF79004EBDFB /* XCLocalSwiftPackageReference "../../../SwiftUICarousalView" */,
+				359AAF3E2E3CCFA800A53FFE /* XCLocalSwiftPackageReference "../../../SwiftUICarouselView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 35DBF2302E38DF4F004EBDFB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				35DBF22E2E38DF4F004EBDFB /* CarousalExampleApp */,
-				35DBF23B2E38DF50004EBDFB /* CarousalExampleAppTests */,
-				35DBF2452E38DF50004EBDFB /* CarousalExampleAppUITests */,
+				35DBF22E2E38DF4F004EBDFB /* CarouselExampleApp */,
+				35DBF23B2E38DF50004EBDFB /* CarouselExampleAppTests */,
+				35DBF2452E38DF50004EBDFB /* CarouselExampleAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -267,12 +266,12 @@
 /* Begin PBXTargetDependency section */
 		35DBF23E2E38DF50004EBDFB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 35DBF22E2E38DF4F004EBDFB /* CarousalExampleApp */;
+			target = 35DBF22E2E38DF4F004EBDFB /* CarouselExampleApp */;
 			targetProxy = 35DBF23D2E38DF50004EBDFB /* PBXContainerItemProxy */;
 		};
 		35DBF2482E38DF50004EBDFB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 35DBF22E2E38DF4F004EBDFB /* CarousalExampleApp */;
+			target = 35DBF22E2E38DF4F004EBDFB /* CarouselExampleApp */;
 			targetProxy = 35DBF2472E38DF50004EBDFB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -419,7 +418,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lei.CarousalExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lei.CarouselExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -447,7 +446,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lei.CarousalExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lei.CarouselExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -470,7 +469,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CarousalExampleApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CarousalExampleApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CarouselExampleApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CarouselExampleApp";
 			};
 			name = Debug;
 		};
@@ -489,7 +488,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CarousalExampleApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CarousalExampleApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CarouselExampleApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CarouselExampleApp";
 			};
 			name = Release;
 		};
@@ -530,7 +529,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		35DBF22A2E38DF4E004EBDFB /* Build configuration list for PBXProject "CarousalExampleApp" */ = {
+		35DBF22A2E38DF4E004EBDFB /* Build configuration list for PBXProject "CarouselExampleApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				35DBF24E2E38DF50004EBDFB /* Debug */,
@@ -539,7 +538,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		35DBF2502E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarousalExampleApp" */ = {
+		35DBF2502E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarouselExampleApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				35DBF2512E38DF50004EBDFB /* Debug */,
@@ -548,7 +547,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		35DBF2532E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarousalExampleAppTests" */ = {
+		35DBF2532E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarouselExampleAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				35DBF2542E38DF50004EBDFB /* Debug */,
@@ -557,7 +556,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		35DBF2562E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarousalExampleAppUITests" */ = {
+		35DBF2562E38DF50004EBDFB /* Build configuration list for PBXNativeTarget "CarouselExampleAppUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				35DBF2572E38DF50004EBDFB /* Debug */,
@@ -569,16 +568,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		35DBF2592E38DF79004EBDFB /* XCLocalSwiftPackageReference "../../../SwiftUICarousalView" */ = {
+		359AAF3E2E3CCFA800A53FFE /* XCLocalSwiftPackageReference "../../../SwiftUICarouselView" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../SwiftUICarousalView;
+			relativePath = ../../../SwiftUICarouselView;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		35DBF25A2E38DF79004EBDFB /* SwiftUICarousalView */ = {
+		359AAF3F2E3CCFA800A53FFE /* SwiftUICarouselView */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUICarousalView;
+			productName = SwiftUICarouselView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
