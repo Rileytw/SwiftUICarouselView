@@ -34,7 +34,7 @@ private extension IndicatorView {
     
     var maxWidth: CGFloat {
         let width = isOverSize ? containerSize.width : size.width
-        return width - 2 * indicator.horizontalInset
+        return max(0, width - 2 * indicator.horizontalInset)
     }
     
     @ViewBuilder
