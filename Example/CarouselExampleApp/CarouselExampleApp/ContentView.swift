@@ -9,8 +9,10 @@ import SwiftUI
 import SwiftUICarouselView
 
 struct ContentView: View {
+    @State private var currentIndex: Int = 0
+    
     var body: some View {
-        CarouselView(itemLayout: ItemLayout(width: 300, ratio: 3/2, spacing: 1), dataSource: carousalItems)
+        CarouselView(currentIndex: $currentIndex, itemLayout: ItemLayout(width: 300, ratio: 3/2, spacing: 1), dataSource: carousalItems)
             .scaleAnimation()
             .indicator()
             .frame(maxWidth: .infinity)

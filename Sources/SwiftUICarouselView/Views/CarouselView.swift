@@ -12,6 +12,7 @@ import SwiftUI
 /// `CarouselView` provides a smooth, interactive carousel experience with support for
 /// automatic sizing, custom layouts, and responsive design. Items can be navigated
 /// through touch gestures with optional indicators and animations.
+/// The current index can be controlled externally and reflects user interactions.
 ///
 /// ## Features
 /// - Responsive item sizing based on container width or fixed dimensions
@@ -20,6 +21,7 @@ import SwiftUI
 ///
 /// ## Basic Usage
 /// ```swift
+/// @State private var currentIndex = 0
 /// let items = [
 ///     CarouselItem(content: AnyView(Text("Item 1"))),
 ///     CarouselItem(content: AnyView(Text("Item 2"))),
@@ -27,6 +29,7 @@ import SwiftUI
 /// ]
 ///
 /// CarouselView(
+///     currentIndex: $currentIndex
 ///     itemLayout: ItemLayout(ratio: 16.0/9.0, spacing: 12),
 ///     dataSource: items
 /// )
@@ -35,6 +38,7 @@ import SwiftUI
 /// ## Advanced Usage
 /// ```swift
 /// CarouselView(
+///     currentIndex: $currentIndex
 ///     itemLayout: ItemLayout(width: 300, ratio: 1.0, spacing: 16),
 ///     dataSource: items,
 ///     backgroundColor: .gray.opacity(0.1),
@@ -46,17 +50,18 @@ import SwiftUI
 public struct CarouselView: View {
     @Environment(\.carousel) private var carousel
     
+    @Binding var currentIndex: Int
     @State private var itemLayout: ItemLayout
     @State private var itemHeight: CGFloat
     @State private var dataSource: [CarouselItem]
-    @State private var currentIndex: Int = 0
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     @State private var backgroundColor: Color
     @State private var padding: EdgeInsets
     @State private var size: CGSize = .zero
     
-    public init(itemLayout: ItemLayout, dataSource: [CarouselItem], backgroundColor: Color = .clear, padding: EdgeInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)) {
+    public init(currentIndex: Binding<Int>, itemLayout: ItemLayout, dataSource: [CarouselItem], backgroundColor: Color = .clear, padding: EdgeInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)) {
+        self._currentIndex = currentIndex
         self.itemLayout = itemLayout
         self.itemHeight = itemLayout.height
         self.dataSource = dataSource
