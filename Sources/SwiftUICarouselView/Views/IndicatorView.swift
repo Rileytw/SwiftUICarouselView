@@ -10,18 +10,50 @@ import SwiftUI
 struct IndicatorView: View {
     @Binding var currentIndex: Int
     @Binding var dataSource: [CarouselItem]
+    @Binding var containerSize: CGSize
     var indicator: Indicator
+    @State private var size: CGSize = .zero
     
     var body: some View {
-        indicatorView
-            .indicatorBackground(indicator.background)
+        Group {
+            if isOverSize {
+                scrollableIndicatorView
+            } else {
+                indicatorView
+            }
+        }
+        .frame(maxWidth: maxWidth)
     }
 }
 
 // MARK: - Private Methods
 private extension IndicatorView {
+    var isOverSize: Bool {
+        return size.width > containerSize.width
+    }
+    
+    var maxWidth: CGFloat {
+        let width = isOverSize ? containerSize.width : size.width
+        return width - 2 * indicator.horizontalInset
+    }
+    
     @ViewBuilder
     var indicatorView: some View {
+        indicatorItemsView
+            .indicatorBackground(indicator.background)
+            .measureSize($size)
+    }
+    
+    @ViewBuilder
+    var scrollableIndicatorView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            indicatorItemsView
+        }
+        .indicatorBackground(indicator.background)
+    }
+    
+    @ViewBuilder
+    var indicatorItemsView: some View {
         HStack {
             ForEach(dataSource.indices, id: \.self) { index in
                 indicatorItemView(isSelected: index == currentIndex)

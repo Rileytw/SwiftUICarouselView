@@ -54,6 +54,7 @@ public struct CarouselView: View {
     @State private var dragOffset: CGFloat = 0
     @State private var backgroundColor: Color
     @State private var padding: EdgeInsets
+    @State private var size: CGSize = .zero
     
     public init(itemLayout: ItemLayout, dataSource: [CarouselItem], backgroundColor: Color = .clear, padding: EdgeInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)) {
         self.itemLayout = itemLayout
@@ -69,13 +70,14 @@ public struct CarouselView: View {
                 .frame(maxWidth: .infinity, maxHeight: itemHeight)
             
             if let indicator = carousel.indicator {
-                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicator: indicator)
+                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, containerSize: $size, indicator: indicator)
                     .padding(.top, indicator.topPadding)
             }
         }
         .padding(padding)
         .background(backgroundColor)
         .clipped()
+        .measureSize($size)
     }
 }
 
