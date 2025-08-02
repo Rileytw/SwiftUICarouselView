@@ -9,24 +9,55 @@ import SwiftUI
 
 // MARK: - Public Methods
 public extension View {
+    
+    /// Enables page indicators with default circular style
+    ///
+    /// - Parameters:
+    ///   - normalColor: Color for unselected indicators (default: gray)
+    ///   - selectedColor: Color for selected indicator (default: blue)
+    ///   - topPadding: Spacing above indicators (default: 16pt)
+    ///   - background: Optional background styling for indicator container(support capsule and rounded types)
+    /// - Returns: Carousel view with page indicators
     func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, topPadding: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.indicator = Indicator(type: .default(normalColor, selectedColor), topPadding: topPadding, background: background)
         }
     }
     
+    /// Enables page indicators with custom views
+    ///
+    /// - Parameters:
+    ///   - normal: Custom view for unselected indicators
+    ///   - selected: Custom view for selected indicator
+    ///   - topPadding: Spacing above indicators (default: 16pt)
+    ///   - background: Optional background styling for indicator container(support capsule and rounded types)
+    /// - Returns: Carousel view with custom indicators
     func indicator<N: View, S: View>(normal: N, selected: S, topPadding: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), topPadding: topPadding, background: background)
         }
     }
    
+    /// Enables page indicators with ViewBuilder closures
+    ///
+    /// - Parameters:
+    ///   - normal: ViewBuilder closure for unselected indicators
+    ///   - selected: ViewBuilder closure for selected indicator
+    ///   - topPadding: Spacing above indicators (default: 16pt)
+    ///   - background: Optional background styling for indicator container(support capsule and rounded types)
+    /// - Returns: Carousel view with dynamic custom indicators
     func indicator<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, topPadding: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), topPadding: topPadding, background: background)
         }
     }
     
+    /// Enables scale animation effects for carousel items
+    ///
+    /// Selected items appear at full size while unselected items are scaled down.
+    ///
+    /// - Parameter scaleAnimation: Scale animation configuration. Default uses `.easeInOut(duration: 0.3)` animation
+    /// - Returns: Carousel view with scale animation effects
     func scaleAnimation(_ scaleAnimation: ScaleAnimation = .default) -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.scaleAnimation = scaleAnimation

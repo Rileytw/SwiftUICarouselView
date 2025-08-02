@@ -7,6 +7,42 @@
 
 import SwiftUI
 
+/// A customizable carousel view for displaying a horizontal scrolling collection of items
+///
+/// `CarouselView` provides a smooth, interactive carousel experience with support for
+/// automatic sizing, custom layouts, and responsive design. Items can be navigated
+/// through touch gestures with optional indicators and animations.
+///
+/// ## Features
+/// - Responsive item sizing based on container width or fixed dimensions
+/// - Smooth scroll animations and gesture handling
+/// - Customizable spacing, background, and padding
+///
+/// ## Basic Usage
+/// ```swift
+/// let items = [
+///     CarouselItem(content: AnyView(Text("Item 1"))),
+///     CarouselItem(content: AnyView(Text("Item 2"))),
+///     CarouselItem(content: AnyView(Text("Item 3")))
+/// ]
+///
+/// CarouselView(
+///     itemLayout: ItemLayout(ratio: 16.0/9.0, spacing: 12),
+///     dataSource: items
+/// )
+/// ```
+///
+/// ## Advanced Usage
+/// ```swift
+/// CarouselView(
+///     itemLayout: ItemLayout(width: 300, ratio: 1.0, spacing: 16),
+///     dataSource: items,
+///     backgroundColor: .gray.opacity(0.1),
+///     padding: EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+/// )
+/// .indicator()
+/// .scaleAnimation()
+/// ```
 public struct CarouselView: View {
     @Environment(\.carousel) private var carousel
     
