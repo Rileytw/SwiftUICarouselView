@@ -54,6 +54,7 @@ public struct CarouselView: View {
     @State private var dragOffset: CGFloat = 0
     @State private var backgroundColor: Color
     @State private var padding: EdgeInsets
+    @State private var size: CGSize = .zero
     
     public init(itemLayout: ItemLayout, dataSource: [CarouselItem], backgroundColor: Color = .clear, padding: EdgeInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)) {
         self.itemLayout = itemLayout
@@ -69,13 +70,14 @@ public struct CarouselView: View {
                 .frame(maxWidth: .infinity, maxHeight: itemHeight)
             
             if let indicator = carousel.indicator {
-                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicator: indicator)
+                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, containerSize: $size, indicator: indicator)
                     .padding(.top, indicator.topPadding)
             }
         }
         .padding(padding)
         .background(backgroundColor)
         .clipped()
+        .measureSize($size)
     }
 }
 
@@ -88,15 +90,10 @@ private extension CarouselView {
             
             HStack(spacing: itemLayout.spacing) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    if let scaleAnimation = carousel.scaleAnimation {
-                        item.view
-                            .frame(width: itemWidth)
-                            .scaleEffect(index == currentIndex ? 1.0 : scaleAnimation.unselectedScale)
-                            .animation(scaleAnimation.animation, value: currentIndex)
-                    } else {
-                        item.view
-                            .frame(width: itemWidth)
-                    }
+                    
+                    item.view
+                        .frame(width: itemWidth)
+                        .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == currentIndex, animationValue: currentIndex)
                 }
             }
             .offset(x: offset + dragOffset)
@@ -145,8 +142,6 @@ private extension CarouselView {
     func shouldDisableDrag(_ value: DragGesture.Value) -> Bool {
         let itemCount = dataSource.count
         guard itemCount > 1 else { return true }
-        
-        let translation = value.translation.width
-        return (currentIndex == 0 && translation > 0) || (currentIndex == itemCount - 1 && translation < 0)
+        return (currentIndex == 0 && value.isScrollToRight) || (currentIndex == itemCount - 1 && value.isScrollToLeft)
     }
 }
