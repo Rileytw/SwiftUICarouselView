@@ -13,19 +13,24 @@ struct IndicatorView: View {
     var indicator: Indicator
     
     var body: some View {
-        HStack {
-            ForEach(dataSource.indices, id: \.self) { index in
-                indicatorView(isSelected: index == currentIndex)
-            }
-        }
-        .indicatorBackground(indicator.background)
+        indicatorView
+            .indicatorBackground(indicator.background)
     }
 }
 
 // MARK: - Private Methods
 private extension IndicatorView {
     @ViewBuilder
-    func indicatorView(isSelected: Bool) -> some View {
+    var indicatorView: some View {
+        HStack {
+            ForEach(dataSource.indices, id: \.self) { index in
+                indicatorItemView(isSelected: index == currentIndex)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func indicatorItemView(isSelected: Bool) -> some View {
         switch indicator.type {
         case .default(let normal, let selected):
             Circle()
