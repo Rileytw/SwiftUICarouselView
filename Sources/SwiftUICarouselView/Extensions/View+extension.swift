@@ -86,4 +86,15 @@ extension View {
                     .fill(color)
             )
     }
+    
+    func applyScaleAnimation(_ scaleAnimation: ScaleAnimation?, isSelected: Bool, animationValue: Int) -> some View {
+            Group {
+                if let scaleAnimation = scaleAnimation {
+                    self.scaleEffect(isSelected ? 1.0 : scaleAnimation.unselectedScale)
+                        .animation(scaleAnimation.animation, value: animationValue)
+                } else {
+                    self
+                }
+            }
+        }
 }

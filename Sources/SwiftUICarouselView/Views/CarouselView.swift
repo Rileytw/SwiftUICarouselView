@@ -88,15 +88,10 @@ private extension CarouselView {
             
             HStack(spacing: itemLayout.spacing) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    if let scaleAnimation = carousel.scaleAnimation {
-                        item.view
-                            .frame(width: itemWidth)
-                            .scaleEffect(index == currentIndex ? 1.0 : scaleAnimation.unselectedScale)
-                            .animation(scaleAnimation.animation, value: currentIndex)
-                    } else {
-                        item.view
-                            .frame(width: itemWidth)
-                    }
+                    
+                    item.view
+                        .frame(width: itemWidth)
+                        .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == currentIndex, animationValue: currentIndex)
                 }
             }
             .offset(x: offset + dragOffset)
