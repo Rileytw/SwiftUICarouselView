@@ -142,8 +142,6 @@ private extension CarouselView {
     func shouldDisableDrag(_ value: DragGesture.Value) -> Bool {
         let itemCount = dataSource.count
         guard itemCount > 1 else { return true }
-        
-        let translation = value.translation.width
-        return (currentIndex == 0 && translation > 0) || (currentIndex == itemCount - 1 && translation < 0)
+        return (currentIndex == 0 && value.isScrollToRight) || (currentIndex == itemCount - 1 && value.isScrollToLeft)
     }
 }
