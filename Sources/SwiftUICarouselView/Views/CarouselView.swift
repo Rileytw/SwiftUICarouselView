@@ -67,6 +67,7 @@ public struct CarouselView: View {
         self.dataSource = dataSource
         self.backgroundColor = backgroundColor
         self.padding = padding
+        logIndexWarningIfNeeded(index: currentIndex.wrappedValue)
     }
     
     public var body: some View {
@@ -123,6 +124,9 @@ private extension CarouselView {
                 offset = -(itemWidth + itemLayout.spacing) * CGFloat(currentIndex) + (geometry.size.width - itemWidth) / 2
                 itemHeight = itemWidth / itemLayout.ratio
             }
+            .onChange(of: currentIndex) { newValue in
+                logIndexWarningIfNeeded(index: newValue)
+            }
         }
     }
     
@@ -148,5 +152,21 @@ private extension CarouselView {
         let itemCount = dataSource.count
         guard itemCount > 1 else { return true }
         return (currentIndex == 0 && value.isScrollToRight) || (currentIndex == itemCount - 1 && value.isScrollToLeft)
+    }
+    
+    func logIndexWarningIfNeeded(index: Int) {
+        #if DEBUG
+        guard !dataSource.isEmpty else {
+            print("⚠️ CarouselView Warning: Cannot set currentIndex (\(index)) - dataSource is empty")
+            return
+        }
+        
+        let validRange = 0..<dataSource.count
+        
+        if !validRange.contains(index) {
+            let clampedIndex = max(0, min(index, dataSource.count - 1))
+            print("⚠️ CarouselView Warning: currentIndex (\(index)) is out of valid range \(validRange). Will use \(clampedIndex) instead.")
+        }
+        #endif
     }
 }
