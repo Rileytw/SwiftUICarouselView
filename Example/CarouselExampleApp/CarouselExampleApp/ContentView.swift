@@ -9,11 +9,8 @@ import SwiftUI
 import SwiftUICarouselView
 
 struct ContentView: View {
-    private let itemWidth: CGFloat = 300
-    private let itemHeight: CGFloat = 200
-    
     var body: some View {
-        CarouselView(layout: LayoutConfiguration(itemWidth: itemWidth, itemHeight: itemHeight), dataSource: carousalItems)
+        CarouselView(itemLayout: ItemLayout(width: 300, ratio: 3/2, spacing: 1), dataSource: carousalItems)
             .scaleAnimation()
             .indicator()
             .frame(maxWidth: .infinity)
@@ -49,7 +46,7 @@ private extension ContentView {
                         .foregroundColor(.secondary)
                 )
         }
-        .frame(width: itemWidth, height: itemHeight)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
         .cornerRadius(15)
         .shadow(radius: 5)
