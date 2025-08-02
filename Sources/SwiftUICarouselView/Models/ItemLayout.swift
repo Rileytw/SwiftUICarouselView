@@ -9,11 +9,23 @@ import Foundation
 import SwiftUI
 
 public struct ItemLayout {
-    let size: CGSize
+    let width: CGFloat?
+    let ratio: CGFloat
     let spacing: CGFloat
     
-   public init(size: CGSize, spacing: CGFloat = 16) {
-        self.size = size
+    public init(width: CGFloat? = nil, ratio: CGFloat, spacing: CGFloat) {
+        self.width = width
+        self.ratio = ratio
         self.spacing = spacing
+    }
+}
+
+// MARK: Internal Methods
+extension ItemLayout {
+    var height: CGFloat {
+       guard let width else {
+            return 0
+        }
+        return width / ratio
     }
 }

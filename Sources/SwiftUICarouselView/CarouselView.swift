@@ -11,30 +11,34 @@ public struct CarouselView: View {
     @Environment(\.carousel) private var carousel
     
     @State private var itemLayout: ItemLayout
+    @State private var itemHeight: CGFloat
     @State private var dataSource: [CarouselItem]
     @State private var currentIndex: Int = 0
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     @State private var backgroundColor: Color
+    @State private var padding: EdgeInsets
     
-    public init(itemLayout: ItemLayout, dataSource: [CarouselItem], backgroundColor: Color = .clear) {
+    public init(itemLayout: ItemLayout, dataSource: [CarouselItem], backgroundColor: Color = .clear, padding: EdgeInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)) {
         self.itemLayout = itemLayout
+        self.itemHeight = itemLayout.height
         self.dataSource = dataSource
         self.backgroundColor = backgroundColor
+        self.padding = padding
     }
     
     public var body: some View {
         VStack(spacing: 0) {
             carouselView
-                .frame(maxWidth: .infinity, maxHeight: itemLayout.size.height)
+                .frame(maxWidth: .infinity, maxHeight: itemHeight)
             
             if let indicator = carousel.indicator {
                 IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, indicator: indicator)
                     .padding(.top, indicator.topPadding)
             }
         }
+        .padding(padding)
         .background(backgroundColor)
-        .padding()
         .clipped()
     }
 }
@@ -44,7 +48,7 @@ private extension CarouselView {
     @ViewBuilder
     var carouselView: some View {
         GeometryReader { geometry in
-            let itemWidth = itemLayout.size.width
+            let itemWidth = itemLayout.width ?? geometry.size.width
             
             HStack(spacing: itemLayout.spacing) {
                 ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
@@ -79,6 +83,7 @@ private extension CarouselView {
             )
             .onAppear {
                 offset = -(itemWidth + itemLayout.spacing) * CGFloat(currentIndex) + (geometry.size.width - itemWidth) / 2
+                itemHeight = itemWidth / itemLayout.ratio
             }
         }
     }
