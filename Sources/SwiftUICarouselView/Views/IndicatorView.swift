@@ -46,10 +46,17 @@ private extension IndicatorView {
     
     @ViewBuilder
     var scrollableIndicatorView: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            indicatorItemsView
+        ScrollViewReader { value in
+            ScrollView(.horizontal, showsIndicators: false) {
+                indicatorItemsView
+            }
+            .indicatorBackground(indicator.background)
+            .onChange(of: currentIndex) { index in
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    value.scrollTo(index, anchor: .center)
+                }
+            }
         }
-        .indicatorBackground(indicator.background)
     }
     
     @ViewBuilder
@@ -57,6 +64,7 @@ private extension IndicatorView {
         HStack {
             ForEach(dataSource.indices, id: \.self) { index in
                 indicatorItemView(isSelected: index == currentIndex)
+                    .id(index)
             }
         }
     }
