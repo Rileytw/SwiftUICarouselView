@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct IndicatorView: View {
-    @Binding var currentIndex: Int
-    @Binding var dataSource: [CarouselItem]
+struct IndicatorView<Data>: View where Data: RandomAccessCollection {
+    @Binding var selectedIndex: Int
+    @Binding var dataSource: Data
     @Binding var containerSize: CGSize
     var indicator: Indicator
     @State private var size: CGSize = .zero
@@ -51,7 +51,7 @@ private extension IndicatorView {
                 indicatorItemsView
             }
             .indicatorBackground(indicator.background)
-            .onChange(of: currentIndex) { index in
+            .onChange(of: selectedIndex) { index in
                 withAnimation(.easeInOut(duration: 0.3)) {
                     value.scrollTo(index, anchor: .center)
                 }
@@ -62,8 +62,8 @@ private extension IndicatorView {
     @ViewBuilder
     var indicatorItemsView: some View {
         HStack {
-            ForEach(dataSource.indices, id: \.self) { index in
-                indicatorItemView(isSelected: index == currentIndex)
+            ForEach(0..<dataSource.count, id: \.self) { index in
+                indicatorItemView(isSelected: index == selectedIndex)
                     .id(index)
             }
         }

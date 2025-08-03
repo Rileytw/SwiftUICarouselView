@@ -12,94 +12,147 @@ import SwiftUI
 /// `CarouselView` provides a smooth, interactive carousel experience with support for
 /// automatic sizing, custom layouts, and responsive design. Items can be navigated
 /// through touch gestures with optional indicators and animations.
-/// The current index can be controlled externally and reflects user interactions.
+/// The carousel automatically measures the first item's size to determine the optimal height,
+/// ensuring a perfect fit without manual ratio calculations.
 ///
 /// ## Features
-/// - Responsive item sizing based on container width or fixed dimensions
-/// - Smooth scroll animations and gesture handling
-/// - Customizable spacing, background, and padding
+/// - **Automatic Height Calculation**: Measures content size dynamically for perfect fit
+/// - **Generic Data Support**: Works with any `RandomAccessCollection` and `Identifiable` items
+/// - **Responsive Design**: Adapts to container width while maintaining content proportions
+/// - **Smooth Interactions**: Gesture-based navigation with customizable animations
+/// - **Flexible Styling**: Support for indicators, scale animations, and custom spacing
+/// - **Type Safety**: Full SwiftUI type safety with generic content builders
 ///
 /// ## Basic Usage
 /// ```swift
-/// @State private var currentIndex = 0
-/// let items = [
-///     CarouselItem(content: AnyView(Text("Item 1"))),
-///     CarouselItem(content: AnyView(Text("Item 2"))),
-///     CarouselItem(content: AnyView(Text("Item 3")))
+/// @State private var selectedIndex = 0
+/// let cards = [
+///     Card(id: 1, title: "item 1"),
+///     Card(id: 2, title: "item 2"),
+///     Card(id: 3, title: "item3")
 /// ]
 ///
-/// CarouselView(
-///     currentIndex: $currentIndex
-///     itemLayout: ItemLayout(ratio: 16.0/9.0, spacing: 12),
-///     dataSource: items
-/// )
+/// CarouselView(cards, id: \.id, selectedIndex: $selectedIndex) { card in
+///     CardView(card)
+/// }
+/// .indicator()
+/// .scaleAnimation()
 /// ```
 ///
 /// ## Advanced Usage
 /// ```swift
-/// CarouselView(
-///     currentIndex: $currentIndex
-///     itemLayout: ItemLayout(width: 300, ratio: 1.0, spacing: 16),
-///     dataSource: items,
-///     backgroundColor: .gray.opacity(0.1),
-///     padding: EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-/// )
-/// .indicator()
+/// CarouselView(products, id: \.id, selectedIndex: $selectedProduct, itemSpacing: 24) { product in
+///     ProductCardView(product: product)
+///         .frame(width: 280)
+///         .background(Color.white)
+///         .cornerRadius(16)
+///         .shadow(radius: 8)
+/// }
+/// .indicator(.gray.opacity(0.4), .blue, topPadding: 20)
 /// .scaleAnimation()
 /// ```
-public struct CarouselView: View {
+///
+/// ## Custom Spacing and Indicators
+/// ```swift
+/// CarouselView(items, id: \.id, selectedIndex: $index, itemSpacing: 32) { item in
+///     CustomItemView(item: item)
+/// }
+/// .indicator(
+///     normal: Circle().fill(.gray).frame(width: 6, height: 6),
+///     selected: Circle().fill(.blue).frame(width: 10, height: 10)
+/// )
+/// .scaleAnimation()
+/// ```
+///
+/// ## Working with Different Data Types
+/// ```swift
+/// // With Identifiable objects
+/// CarouselView(photos, id: \.id, selectedIndex: $index) { photo in
+///     PhotoView(photo: photo)
+/// }
+///
+/// // With basic types
+/// let colors: [Color] = [.red, .blue, .green]
+/// CarouselView(colors, id: \.self, selectedIndex: $colorIndex) { color in
+///     Circle()
+///         .fill(color)
+///         .frame(width: 100, height: 100)
+/// }
+///
+/// // With indexed arrays
+/// let items = Array(0..<10)
+/// CarouselView(items, id: \.self, selectedIndex: $selectedIndex) { number in
+///     Text("\(number)")
+///         .font(.largeTitle)
+///         .frame(width: 80, height: 80)
+///         .background(Color.blue)
+///         .foregroundColor(.white)
+///         .clipShape(Circle())
+/// }
+/// ```
+public struct CarouselView<Data, ID, Content>: View where Data: RandomAccessCollection, ID: Hashable, Content: View {
     @Environment(\.carousel) private var carousel
     
-    @Binding var currentIndex: Int
-    @State private var itemLayout: ItemLayout
-    @State private var itemHeight: CGFloat
-    @State private var dataSource: [CarouselItem]
+    @Binding var selectedIndex: Int
+    let id: KeyPath<Data.Element, ID>
+    let content: (Data.Element) -> Content
+    @State private var dataSource: Data
+    @State private var itemSpacing: CGFloat
+    @State private var itemSize: CGSize = .zero
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
-    @State private var backgroundColor: Color
-    @State private var padding: EdgeInsets
     @State private var size: CGSize = .zero
     
-    public init(currentIndex: Binding<Int>, itemLayout: ItemLayout, dataSource: [CarouselItem], backgroundColor: Color = .clear, padding: EdgeInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)) {
-        self._currentIndex = currentIndex
-        self.itemLayout = itemLayout
-        self.itemHeight = itemLayout.height
+    public init(_ dataSource: Data, id: KeyPath<Data.Element, ID>, selectedIndex: Binding<Int>, itemSpacing: CGFloat = 16, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.dataSource = dataSource
-        self.backgroundColor = backgroundColor
-        self.padding = padding
-        logIndexWarningIfNeeded(index: currentIndex.wrappedValue)
+        self.id = id
+        self._selectedIndex = selectedIndex
+        self.content = content
+        self.itemSpacing = itemSpacing
+        logIndexWarningIfNeeded(index: selectedIndex.wrappedValue)
     }
     
     public var body: some View {
-        VStack(spacing: 0) {
-            carouselView
-                .frame(maxWidth: .infinity, maxHeight: itemHeight)
-            
-            if let indicator = carousel.indicator {
-                IndicatorView(currentIndex: $currentIndex, dataSource: $dataSource, containerSize: $size, indicator: indicator)
-                    .padding(.top, indicator.topPadding)
+        Group {
+            if isItemSizeMeasured {
+                VStack(spacing: 0) {
+                    carouselView
+                        .frame(maxWidth: .infinity, maxHeight: itemSize.height)
+                    
+                    if let indicator = carousel.indicator {
+                        IndicatorView(selectedIndex: $selectedIndex, dataSource: $dataSource, containerSize: $size, indicator: indicator)
+                            .padding(.top, indicator.topPadding)
+                    }
+                }
+                .clipped()
+                .measureSize($size)
+            } else {
+                measurementView
+                    .opacity(0)
             }
         }
-        .padding(padding)
-        .background(backgroundColor)
-        .clipped()
-        .measureSize($size)
+        .onChange(of: itemSize) { itemSize in
+            logItemSize()
+        }
     }
 }
 
 // MARK: - Private Methods
 private extension CarouselView {
+    var isItemSizeMeasured: Bool {
+        return itemSize != .zero
+    }
+    
     @ViewBuilder
     var carouselView: some View {
         GeometryReader { geometry in
-            let itemWidth = itemLayout.width ?? geometry.size.width
+            let itemWidth = itemSize.width
             
-            HStack(spacing: itemLayout.spacing) {
-                ForEach(Array(dataSource.enumerated()), id: \.element.id) { index, item in
-                    
-                    item.view
+            LazyHStack(spacing: itemSpacing) {
+                ForEach(Array(dataSource.enumerated()), id: \.offset) { index, element in
+                    content(element)
                         .frame(width: itemWidth)
-                        .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == currentIndex, animationValue: currentIndex)
+                        .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == selectedIndex, animationValue: selectedIndex)
                 }
             }
             .offset(x: offset + dragOffset)
@@ -117,16 +170,23 @@ private extension CarouselView {
                             return
                         }
                         
-                        handleDragEnd(value, itemWidth: itemWidth, spacing: itemLayout.spacing, parentViewWidth: geometry.size.width)
+                        handleDragEnd(value, itemWidth: itemWidth, spacing: itemSpacing, parentViewWidth: geometry.size.width)
                     }
             )
             .onAppear {
-                offset = -(itemWidth + itemLayout.spacing) * CGFloat(currentIndex) + (geometry.size.width - itemWidth) / 2
-                itemHeight = itemWidth / itemLayout.ratio
+                offset = -(itemWidth + itemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
             }
-            .onChange(of: currentIndex) { newValue in
+            .onChange(of: selectedIndex) { newValue in
                 logIndexWarningIfNeeded(index: newValue)
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var measurementView: some View {
+        if let firstElement = dataSource.first {
+            content(firstElement)
+                .measureSize($itemSize)
         }
     }
     
@@ -137,27 +197,27 @@ private extension CarouselView {
         withAnimation(.easeOut(duration: 0.3)) {
             if abs(value.translation.width) > threshold {
                 if value.translation.width > 0 {
-                    currentIndex -= 1
+                    selectedIndex -= 1
                 } else {
-                    currentIndex += 1
+                    selectedIndex += 1
                 }
             }
             
             dragOffset = 0
-            offset = -itemFullWidth * CGFloat(currentIndex) + (parentViewWidth - itemWidth) / 2
+            offset = -itemFullWidth * CGFloat(selectedIndex) + (parentViewWidth - itemWidth) / 2
         }
     }
     
     func shouldDisableDrag(_ value: DragGesture.Value) -> Bool {
         let itemCount = dataSource.count
         guard itemCount > 1 else { return true }
-        return (currentIndex == 0 && value.isScrollToRight) || (currentIndex == itemCount - 1 && value.isScrollToLeft)
+        return (selectedIndex == 0 && value.isScrollToRight) || (selectedIndex == itemCount - 1 && value.isScrollToLeft)
     }
     
     func logIndexWarningIfNeeded(index: Int) {
         #if DEBUG
-        guard !dataSource.isEmpty else {
-            print("⚠️ CarouselView Warning: Cannot set currentIndex (\(index)) - dataSource is empty")
+        guard dataSource.count > 0 else {
+            print("⚠️ CarouselView Warning: Cannot set selectedIndex (\(index)) - dataSource is empty")
             return
         }
         
@@ -165,8 +225,14 @@ private extension CarouselView {
         
         if !validRange.contains(index) {
             let clampedIndex = max(0, min(index, dataSource.count - 1))
-            print("⚠️ CarouselView Warning: currentIndex (\(index)) is out of valid range \(validRange). Will use \(clampedIndex) instead.")
+            print("⚠️ CarouselView Warning: selectedIndex (\(index)) is out of valid range \(validRange). Will use \(clampedIndex) instead.")
         }
         #endif
+    }
+    
+    func logItemSize() {
+    #if DEBUG
+        print("CarouselView Debug: itemSize updated to: \(itemSize)")
+    #endif
     }
 }

@@ -10,29 +10,26 @@ import SwiftUICarouselView
 
 struct ContentView: View {
     @State private var currentIndex: Int = 0
+    let cards: [Card] = [
+        Card(content: "Card 1"),
+        Card(content: "Card 2"),
+        Card(content: "Card 3"),
+        Card(content: "Card 4")
+    ]
     
     var body: some View {
-        CarouselView(currentIndex: $currentIndex, itemLayout: ItemLayout(width: 300, ratio: 3/2, spacing: 1), dataSource: carousalItems)
-            .scaleAnimation()
-            .indicator()
-            .frame(maxWidth: .infinity)
+        CarouselView(cards, id: \.id, selectedIndex: $currentIndex, itemSpacing: 0) { card in
+            createCard(card.content)
+                .padding(.vertical, 4)
+        }
+        .scaleAnimation()
+        .indicator()
+        .frame(maxWidth: .infinity)
     }
 }
 
 // MARK: - Private Methods
 private extension ContentView {
-    var carousalItems: [CarouselItem] {
-        return [CarouselItem(content: {
-            createCard("Item 1")
-        }), CarouselItem(content: {
-            createCard("Item 2")
-        }), CarouselItem(content: {
-            createCard("Item 3")
-        }), CarouselItem(content: {
-            createCard("Item 4")
-        })]
-    }
-    
     @ViewBuilder
     func createCard(_ content: String) -> some View {
         VStack {
@@ -48,16 +45,16 @@ private extension ContentView {
                         .foregroundColor(.secondary)
                 )
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: 300, maxHeight: 200)
         .background(Color.white)
         .cornerRadius(15)
         .shadow(radius: 5)
     }
-    
-    @ViewBuilder
-    var normalView: some View {
-        Text("")
-    }
+}
+
+struct Card: Identifiable {
+    let id: UUID = UUID()
+    let content: String
 }
 
 #Preview {
