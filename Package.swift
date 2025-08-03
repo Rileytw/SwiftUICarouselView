@@ -6,8 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SwiftUICarouselView",
     platforms: [
-        .iOS(.v14),
-        .watchOS(.v7)
+        .iOS(.v14)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
