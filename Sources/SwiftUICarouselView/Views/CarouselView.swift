@@ -109,7 +109,8 @@ public struct CarouselView<Data, ID, Content>: View where Data: RandomAccessColl
         self._selectedIndex = selectedIndex
         self.content = content
         self.itemSpacing = itemSpacing
-        logIndexWarningIfNeeded(index: selectedIndex.wrappedValue)
+        
+        CarouselViewLogger.logIndexWarningIfNeeded(dataSourceCount: dataSource.count, selected: selectedIndex.wrappedValue)
     }
     
     public var body: some View {
@@ -132,7 +133,10 @@ public struct CarouselView<Data, ID, Content>: View where Data: RandomAccessColl
             }
         }
         .onChange(of: itemSize) { itemSize in
-            logItemSize()
+            CarouselViewLogger.logItemSize(itemSize)
+        }
+        .onChange(of: selectedIndex) { index in
+            CarouselViewLogger.logIndexWarningIfNeeded(dataSourceCount: dataSource.count, selected: index)
         }
     }
 }
@@ -176,9 +180,6 @@ private extension CarouselView {
             .onAppear {
                 offset = -(itemWidth + itemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
             }
-            .onChange(of: selectedIndex) { newValue in
-                logIndexWarningIfNeeded(index: newValue)
-            }
         }
     }
     
@@ -212,27 +213,5 @@ private extension CarouselView {
         let itemCount = dataSource.count
         guard itemCount > 1 else { return true }
         return (selectedIndex == 0 && value.isScrollToRight) || (selectedIndex == itemCount - 1 && value.isScrollToLeft)
-    }
-    
-    func logIndexWarningIfNeeded(index: Int) {
-        #if DEBUG
-        guard dataSource.count > 0 else {
-            print("⚠️ CarouselView Warning: Cannot set selectedIndex (\(index)) - dataSource is empty")
-            return
-        }
-        
-        let validRange = 0..<dataSource.count
-        
-        if !validRange.contains(index) {
-            let clampedIndex = max(0, min(index, dataSource.count - 1))
-            print("⚠️ CarouselView Warning: selectedIndex (\(index)) is out of valid range \(validRange). Will use \(clampedIndex) instead.")
-        }
-        #endif
-    }
-    
-    func logItemSize() {
-    #if DEBUG
-        print("CarouselView Debug: itemSize updated to: \(itemSize)")
-    #endif
     }
 }
