@@ -169,9 +169,9 @@ private extension CarouselView {
         withAnimation(.easeOut(duration: 0.3)) {
             if abs(value.translation.width) > threshold {
                 if value.translation.width > 0 {
-                    selectedIndex -= 1
+                    selectedIndex =  max(0, selectedIndex - 1)
                 } else {
-                    selectedIndex += 1
+                    selectedIndex = min(dataSource.count - 1, selectedIndex + 1)
                 }
             }
             
