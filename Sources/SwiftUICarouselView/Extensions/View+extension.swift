@@ -15,13 +15,14 @@ public extension View {
     /// - Parameters:
     ///   - normalColor: Color for unselected indicators (default: gray)
     ///   - selectedColor: Color for selected indicator (default: blue)
+    ///   - radius: Raius for circle indicator(default: 4 pt)
     ///   - topPadding: Spacing above indicators (default: 16pt)
     ///   - horizontalInset: Distance indicators are inset from the carousel edges (default: 16pt)
     ///   - background: Optional background styling for indicator container(support capsule and rounded types)
     /// - Returns: Carousel view with page indicators
-    func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, topPadding: CGFloat = 16, horizontalInset: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
+    func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, radius: CGFloat = 4, topPadding: CGFloat = 16, horizontalInset: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
-            style.indicator = Indicator(type: .default(normalColor, selectedColor), topPadding: topPadding, horizontalInset: horizontalInset, background: background)
+            style.indicator = Indicator(type: .default(normalColor, selectedColor, radius), topPadding: topPadding, horizontalInset: horizontalInset, background: background)
         }
     }
     

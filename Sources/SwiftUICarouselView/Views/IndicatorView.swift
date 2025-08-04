@@ -72,10 +72,10 @@ private extension IndicatorView {
     @ViewBuilder
     func indicatorItemView(isSelected: Bool) -> some View {
         switch indicator.type {
-        case .default(let normal, let selected):
+        case .default(let normal, let selected, let radius):
             Circle()
                 .fill(isSelected ? selected : normal)
-                .frame(width: 8, height: 8)
+                .frame(width: radius * 2, height: radius * 2)
         case .custom(let provider):
             isSelected ? provider.selected : provider.normal
         }

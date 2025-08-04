@@ -8,7 +8,7 @@
 import SwiftUI
 
 public enum IndicatorType {
-    case `default`(Color, Color)
+    case `default`(Color, Color, CGFloat)
     case custom(IndicatorViews)
 }
 
