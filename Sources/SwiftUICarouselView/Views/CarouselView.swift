@@ -17,21 +17,20 @@ import SwiftUI
 ///
 /// ## Features
 /// - **Automatic Height Calculation**: Measures content size dynamically for perfect fit
-/// - **Generic Data Support**: Works with any `RandomAccessCollection` and `Identifiable` items
+/// - **Generic Data Support**: Works with any `RandomAccessCollection` items
 /// - **Responsive Design**: Adapts to container width while maintaining content proportions
 /// - **Smooth Interactions**: Gesture-based navigation with customizable animations
 /// - **Flexible Styling**: Support for indicators, scale animations, and custom spacing
-/// - **Type Safety**: Full SwiftUI type safety with generic content builders
 ///
 /// ## Basic Usage
 /// ```swift
 /// @State private var selectedIndex = 0
 /// let cards: [Card] = [
-/// Card(title: "Card 1", content: "Content of card 1"),
-/// Card(title: "Card 2", content: "Content of card 2"),
-/// Card(title: "Card 3", content: "Content of card 3"),
-/// Card(title: "Card 4", content: "Content of card 4")
-/// ]
+///     Card(title: "Card 1", content: "Content of card 1"),
+///     Card(title: "Card 2", content: "Content of card 2"),
+///     Card(title: "Card 3", content: "Content of card 3"),
+///     Card(title: "Card 4", content: "Content of card 4")
+///     ]
 ///
 /// CarouselView(cards, selectedIndex: $selectedIndex) { card in
 ///     CardView(card)
