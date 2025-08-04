@@ -103,7 +103,7 @@ public struct CarouselView<Data, ID, Content>: View where Data: RandomAccessColl
     @State private var dragOffset: CGFloat = 0
     @State private var size: CGSize = .zero
     
-    public init(_ dataSource: Data, id: KeyPath<Data.Element, ID>, selectedIndex: Binding<Int>, itemSpacing: CGFloat = 16, @ViewBuilder content: @escaping (Data.Element) -> Content) {
+    public init(_ dataSource: Data, id: KeyPath<Data.Element, ID>, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.dataSource = dataSource
         self.id = id
         self._selectedIndex = selectedIndex

@@ -20,7 +20,7 @@ public extension View {
     ///   - horizontalInset: Distance indicators are inset from the carousel edges (default: 16pt)
     ///   - background: Optional background styling for indicator container(support capsule and rounded types)
     /// - Returns: Carousel view with page indicators
-    func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, radius: CGFloat = 4, topPadding: CGFloat = 16, horizontalInset: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
+    func indicator(_ normalColor: Color = .gray, _ selectedColor: Color = .blue, radius: CGFloat = .carouselIndicatorRadius, topPadding: CGFloat = .carouselDefaultPadding, horizontalInset: CGFloat = .carouselDefaultPadding, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.indicator = Indicator(type: .default(normalColor, selectedColor, radius), topPadding: topPadding, horizontalInset: horizontalInset, background: background)
         }
@@ -35,7 +35,7 @@ public extension View {
     ///   - horizontalInset: Distance indicators are inset from the carousel edges (default: 16pt)
     ///   - background: Optional background styling for indicator container(support capsule and rounded types)
     /// - Returns: Carousel view with custom indicators
-    func indicator<N: View, S: View>(normal: N, selected: S, topPadding: CGFloat = 16, horizontalInset: CGFloat = 16,  background: IndicatorBackground? = nil) -> some View {
+    func indicator<N: View, S: View>(normal: N, selected: S, topPadding: CGFloat = .carouselDefaultPadding, horizontalInset: CGFloat = .carouselDefaultPadding,  background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), topPadding: topPadding, horizontalInset: horizontalInset, background: background)
         }
@@ -50,7 +50,7 @@ public extension View {
     ///   - horizontalInset: Distance indicators are inset from the carousel edges (default: 16pt)
     ///   - background: Optional background styling for indicator container(support capsule and rounded types)
     /// - Returns: Carousel view with dynamic custom indicators
-    func indicator<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, topPadding: CGFloat = 16, horizontalInset: CGFloat = 16, background: IndicatorBackground? = nil) -> some View {
+    func indicator<N: View, S: View>(@ViewBuilder normal: @escaping () -> N, @ViewBuilder selected: @escaping () -> S, topPadding: CGFloat = .carouselDefaultPadding, horizontalInset: CGFloat = .carouselDefaultPadding, background: IndicatorBackground? = nil) -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.indicator = Indicator(type: .custom(IndicatorViews(normal: normal, selected: selected)), topPadding: topPadding, horizontalInset: horizontalInset, background: background)
         }
@@ -75,7 +75,7 @@ extension View {
         modifier(IndicatorBackgroundModifier(style: style))
     }
     
-    func capsuleBackground(color: Color = .black.opacity(0.1), padding: EdgeInsets = EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)) -> some View {
+    func capsuleBackground(color: Color = .black.opacity(0.1), padding: EdgeInsets = .carouselDefaultPadding) -> some View {
         self.padding(padding)
             .background(
                 Capsule()
@@ -83,7 +83,7 @@ extension View {
             )
     }
     
-    func roundedBackground(color: Color = .black.opacity(0.1), cornerRadius: CGFloat = 8, padding: EdgeInsets = EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)) -> some View {
+    func roundedBackground(color: Color = .black.opacity(0.1), cornerRadius: CGFloat = 8, padding: EdgeInsets = .carouselDefaultPadding) -> some View {
         self.padding(padding)
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius)
