@@ -11,15 +11,15 @@ import SwiftUICarouselView
 struct ContentView: View {
     @State private var currentIndex: Int = 0
     let cards: [Card] = [
-        Card(content: "Card 1"),
-        Card(content: "Card 2"),
-        Card(content: "Card 3"),
-        Card(content: "Card 4")
+        Card(title: "Card 1", content: "Content of card 1"),
+        Card(title: "Card 2", content: "Content of card 2"),
+        Card(title: "Card 3", content: "Content of card 3"),
+        Card(title: "Card 4", content: "Content of card 4")
     ]
     
     var body: some View {
-        CarouselView(cards, id: \.id, selectedIndex: $currentIndex, itemSpacing: 0) { card in
-            createCard(card.content)
+        CarouselView(cards, selectedIndex: $currentIndex, itemSpacing: 0) { card in
+            createCard(card)
                 .padding(.vertical, 4)
         }
         .scaleAnimation()
@@ -31,9 +31,9 @@ struct ContentView: View {
 // MARK: - Private Methods
 private extension ContentView {
     @ViewBuilder
-    func createCard(_ content: String) -> some View {
+    func createCard(_ card: Card) -> some View {
         VStack {
-            Text(content)
+            Text(card.title)
                 .font(.title2)
                 .fontWeight(.medium)
             
@@ -41,7 +41,7 @@ private extension ContentView {
                 .fill(Color.blue.opacity(0.1))
                 .frame(height: 100)
                 .overlay(
-                    Text("Content")
+                    Text(card.content)
                         .foregroundColor(.secondary)
                 )
         }
@@ -52,8 +52,8 @@ private extension ContentView {
     }
 }
 
-struct Card: Identifiable {
-    let id: UUID = UUID()
+struct Card {
+    let title: String
     let content: String
 }
 

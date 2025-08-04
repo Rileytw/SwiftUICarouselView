@@ -26,13 +26,14 @@ import SwiftUI
 /// ## Basic Usage
 /// ```swift
 /// @State private var selectedIndex = 0
-/// let cards = [
-///     Card(id: 1, title: "item 1"),
-///     Card(id: 2, title: "item 2"),
-///     Card(id: 3, title: "item3")
+/// let cards: [Card] = [
+/// Card(title: "Card 1", content: "Content of card 1"),
+/// Card(title: "Card 2", content: "Content of card 2"),
+/// Card(title: "Card 3", content: "Content of card 3"),
+/// Card(title: "Card 4", content: "Content of card 4")
 /// ]
 ///
-/// CarouselView(cards, id: \.id, selectedIndex: $selectedIndex) { card in
+/// CarouselView(cards, selectedIndex: $selectedIndex) { card in
 ///     CardView(card)
 /// }
 /// .indicator()
@@ -41,7 +42,7 @@ import SwiftUI
 ///
 /// ## Advanced Usage
 /// ```swift
-/// CarouselView(products, id: \.id, selectedIndex: $selectedProduct, itemSpacing: 24) { product in
+/// CarouselView(products, selectedIndex: $selectedProduct, itemSpacing: 24) { product in
 ///     ProductCardView(product: product)
 ///         .frame(width: 280)
 ///         .background(Color.white)
@@ -54,7 +55,7 @@ import SwiftUI
 ///
 /// ## Custom Spacing and Indicators
 /// ```swift
-/// CarouselView(items, id: \.id, selectedIndex: $index, itemSpacing: 32) { item in
+/// CarouselView(items, selectedIndex: $index, itemSpacing: 32) { item in
 ///     CustomItemView(item: item)
 /// }
 /// .indicator(
@@ -63,38 +64,10 @@ import SwiftUI
 /// )
 /// .scaleAnimation()
 /// ```
-///
-/// ## Working with Different Data Types
-/// ```swift
-/// // With Identifiable objects
-/// CarouselView(photos, id: \.id, selectedIndex: $index) { photo in
-///     PhotoView(photo: photo)
-/// }
-///
-/// // With basic types
-/// let colors: [Color] = [.red, .blue, .green]
-/// CarouselView(colors, id: \.self, selectedIndex: $colorIndex) { color in
-///     Circle()
-///         .fill(color)
-///         .frame(width: 100, height: 100)
-/// }
-///
-/// // With indexed arrays
-/// let items = Array(0..<10)
-/// CarouselView(items, id: \.self, selectedIndex: $selectedIndex) { number in
-///     Text("\(number)")
-///         .font(.largeTitle)
-///         .frame(width: 80, height: 80)
-///         .background(Color.blue)
-///         .foregroundColor(.white)
-///         .clipShape(Circle())
-/// }
-/// ```
-public struct CarouselView<Data, ID, Content>: View where Data: RandomAccessCollection, ID: Hashable, Content: View {
+public struct CarouselView<Data, Content>: View where Data: RandomAccessCollection, Content: View {
     @Environment(\.carousel) private var carousel
     
     @Binding var selectedIndex: Int
-    let id: KeyPath<Data.Element, ID>
     let content: (Data.Element) -> Content
     @State private var dataSource: Data
     @State private var itemSpacing: CGFloat
@@ -103,9 +76,8 @@ public struct CarouselView<Data, ID, Content>: View where Data: RandomAccessColl
     @State private var dragOffset: CGFloat = 0
     @State private var size: CGSize = .zero
     
-    public init(_ dataSource: Data, id: KeyPath<Data.Element, ID>, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
+    public init(_ dataSource: Data, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.dataSource = dataSource
-        self.id = id
         self._selectedIndex = selectedIndex
         self.content = content
         self.itemSpacing = itemSpacing
@@ -184,7 +156,7 @@ private extension CarouselView {
     }
     
     @ViewBuilder
-    private var measurementView: some View {
+    var measurementView: some View {
         if let firstElement = dataSource.first {
             content(firstElement)
                 .measureSize($itemSize)
