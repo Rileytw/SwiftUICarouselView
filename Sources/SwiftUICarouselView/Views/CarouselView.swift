@@ -119,6 +119,17 @@ private extension CarouselView {
         return itemSize != .zero
     }
     
+    var adjustedItemSpacing: CGFloat {
+        guard let scaleAnimation = carousel.scaleAnimation else {
+            return itemSpacing
+        }
+        
+        let scaleReduction = (itemSize.width - itemSize.width * scaleAnimation.unselectedScale) / 2
+        let compensatedSpacing = itemSpacing - scaleReduction
+        
+        return min(itemSpacing, compensatedSpacing)
+    }
+    
     @ViewBuilder
     var carouselView: some View {
         if #available(iOS 17.0, *) {
@@ -136,7 +147,7 @@ private extension CarouselView {
             let horizontlMargin = (geometry.size.width - itemWidth) / 2
             
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: itemSpacing) {
+                LazyHStack(spacing: adjustedItemSpacing) {
                     itemsView
                 }
                 .scrollTargetLayout()
@@ -158,7 +169,7 @@ private extension CarouselView {
         let itemWidth = itemSize.width
         
         GeometryReader { geometry in
-            HStack(spacing: itemSpacing) {
+            HStack(spacing: adjustedItemSpacing) {
                 itemsView
             }
             .offset(x: offset + dragOffset)
@@ -176,11 +187,11 @@ private extension CarouselView {
                             return
                         }
                         
-                        handleDragEnd(value, itemWidth: itemWidth, spacing: itemSpacing, parentViewWidth: geometry.size.width)
+                        handleDragEnd(value, itemWidth: itemWidth, spacing: adjustedItemSpacing, parentViewWidth: geometry.size.width)
                     }
             )
             .onAppear {
-                offset = -(itemWidth + itemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
+                offset = -(itemWidth + adjustedItemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
             }
         }
     }
