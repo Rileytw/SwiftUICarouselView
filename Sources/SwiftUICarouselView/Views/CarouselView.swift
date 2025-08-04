@@ -123,7 +123,7 @@ private extension CarouselView {
         GeometryReader { geometry in
             let itemWidth = itemSize.width
             
-            LazyHStack(spacing: itemSpacing) {
+            HStack(spacing: itemSpacing) {
                 ForEach(Array(dataSource.enumerated()), id: \.offset) { index, element in
                     content(element)
                         .frame(width: itemWidth)
