@@ -46,11 +46,12 @@ struct ScrollCarouselView<Data, Content>: View where Data: RandomAccessCollectio
                 selectedIndex = newIndex % dataSource.count
             }
             .onAppear {
+                centeredViewID = selectedIndex
                 if carousel.isInfiniteLoop {
                     // Delay initial scroll position setup to prevent carousel offset
                     // Add 0.1s delay when setting initial centeredViewID to allow ScrollView layout calculations to complete, preventing visual offset on appear.
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        centeredViewID = dataSource.count
+                        centeredViewID = dataSource.count + selectedIndex
                     }
                 }
             }
