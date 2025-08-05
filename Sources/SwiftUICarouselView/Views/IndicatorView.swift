@@ -39,16 +39,20 @@ private extension IndicatorView {
     
     @ViewBuilder
     var indicatorView: some View {
-        indicatorItemsView
-            .indicatorBackground(indicator.background)
-            .measureSize($size)
+        HStack {
+            indicatorItemsView
+        }
+        .indicatorBackground(indicator.background)
+        .measureSize($size)
     }
     
     @ViewBuilder
     var scrollableIndicatorView: some View {
         ScrollViewReader { value in
             ScrollView(.horizontal, showsIndicators: false) {
-                indicatorItemsView
+                LazyHStack {
+                    indicatorItemsView
+                }
             }
             .indicatorBackground(indicator.background)
             .onChange(of: selectedIndex) { index in
@@ -57,15 +61,14 @@ private extension IndicatorView {
                 }
             }
         }
+        .frame(width: maxWidth, height: size.height)
     }
     
     @ViewBuilder
     var indicatorItemsView: some View {
-        HStack {
-            ForEach(0..<dataSource.count, id: \.self) { index in
-                indicatorItemView(isSelected: index == selectedIndex)
-                    .id(index)
-            }
+        ForEach(0..<dataSource.count, id: \.self) { index in
+            indicatorItemView(isSelected: index == selectedIndex)
+                .id(index)
         }
     }
     

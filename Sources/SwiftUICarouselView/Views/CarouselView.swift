@@ -74,6 +74,7 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     @State private var size: CGSize = .zero
+    @State private var centeredViewID: Int?
     
     public init(_ dataSource: Data, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.dataSource = dataSource
@@ -109,6 +110,9 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
         .onChange(of: selectedIndex) { index in
             CarouselViewLogger.logIndexWarningIfNeeded(dataSourceCount: dataSource.count, selected: index)
         }
+        .onAppear {
+            CarouselViewLogger.logPerformanceWarningIfNeeded(itemCount: dataSource.count)
+        }
     }
 }
 
@@ -118,17 +122,58 @@ private extension CarouselView {
         return itemSize != .zero
     }
     
+    var adjustedItemSpacing: CGFloat {
+        guard let scaleAnimation = carousel.scaleAnimation else {
+            return itemSpacing
+        }
+        
+        let scaleReduction = (itemSize.width - itemSize.width * scaleAnimation.unselectedScale) / 2
+        let compensatedSpacing = itemSpacing - scaleReduction
+        
+        return min(itemSpacing, compensatedSpacing)
+    }
+    
     @ViewBuilder
     var carouselView: some View {
-        GeometryReader { geometry in
+        if #available(iOS 17.0, *) {
+            scrollCarouselView
+        } else {
+            dragGestureCarouselView
+        }
+    }
+    
+    @available(iOS 17.0, *)
+    @ViewBuilder
+    var scrollCarouselView: some View {
+        GeometryReader {  geometry in
             let itemWidth = itemSize.width
+            let horizontlMargin = (geometry.size.width - itemWidth) / 2
             
-            HStack(spacing: itemSpacing) {
-                ForEach(Array(dataSource.enumerated()), id: \.offset) { index, element in
-                    content(element)
-                        .frame(width: itemWidth)
-                        .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == selectedIndex, animationValue: selectedIndex)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: adjustedItemSpacing) {
+                    itemsView
                 }
+                .scrollTargetLayout()
+            }
+            .contentMargins(.horizontal, horizontlMargin)
+            .scrollPosition(id: $centeredViewID, anchor: .center)
+            .scrollTargetBehavior(.viewAligned)
+            .onChange(of: centeredViewID) { _, newValue in
+                guard let newIndex = newValue else {
+                    return
+                }
+                selectedIndex = newIndex
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var dragGestureCarouselView: some View {
+        let itemWidth = itemSize.width
+        
+        GeometryReader { geometry in
+            HStack(spacing: adjustedItemSpacing) {
+                itemsView
             }
             .offset(x: offset + dragOffset)
             .gesture(
@@ -145,12 +190,22 @@ private extension CarouselView {
                             return
                         }
                         
-                        handleDragEnd(value, itemWidth: itemWidth, spacing: itemSpacing, parentViewWidth: geometry.size.width)
+                        handleDragEnd(value, itemWidth: itemWidth, spacing: adjustedItemSpacing, parentViewWidth: geometry.size.width)
                     }
             )
             .onAppear {
-                offset = -(itemWidth + itemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
+                offset = -(itemWidth + adjustedItemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
             }
+        }
+    }
+    
+    @ViewBuilder
+    var itemsView: some View {
+        ForEach(Array(dataSource.enumerated()), id: \.offset) { index, element in
+            content(element)
+                .frame(width: itemSize.width)
+                .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == selectedIndex, animationValue: selectedIndex)
+                .id(index)
         }
     }
     

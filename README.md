@@ -207,8 +207,12 @@ CarouselView(items, selectedIndex: $selectedIndex, itemSpacing: 32) { item in
 ## How It Works
 
 - **Automatic Sizing**: The carousel measures the first item's size to determine the optimal height
-- **Position-Based**: Uses position indexing for efficient rendering and navigation
-- **Gesture-Driven**: Supports smooth drag gestures with boundary protection
+
+
+- **Progressive Enhancement**: Automatically uses the best implementation for each iOS version
+  - **iOS 17+**: Native ScrollView with lazy loading and smooth scroll physics
+  - **iOS 14-16**: Custom HStack implementation with drag gesture navigation  
+    *(⚠️ Performance Note: iOS 14-16 loads all items in memory simultaneously. Debug builds will show warnings for larger datasets.)*
 
 ## License
 
