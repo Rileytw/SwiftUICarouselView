@@ -78,9 +78,9 @@ private extension ScrollCarouselView {
             transaction.disablesAnimations = true
             
             withTransaction(transaction) {
-                dataSourceArray.append(dataSource)
-                dataSourceArray.removeFirst()
                 DispatchQueue.main.async {
+                    dataSourceArray.append(dataSource)
+                    dataSourceArray.removeFirst()
                     self.centeredViewID = centeredViewID - itemCount
                 }
             }
@@ -89,10 +89,9 @@ private extension ScrollCarouselView {
             transaction.disablesAnimations = true
             
             withTransaction(transaction) {
-                dataSourceArray.insert(dataSource, at: 0)
-                dataSourceArray.removeLast()
-                
                 DispatchQueue.main.async {
+                    dataSourceArray.insert(dataSource, at: 0)
+                    dataSourceArray.removeLast()
                     self.centeredViewID = centeredViewID + itemCount
                 }
             }

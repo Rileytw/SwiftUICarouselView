@@ -148,8 +148,7 @@ private extension CarouselView {
                     get: { adjustedItemSpacing },
                     set: { _ in }
                 ),
-                content: content
-            )
+                content: content)
         } else {
             DragGestureCarouselView(
                 selectedIndex: $selectedIndex,
