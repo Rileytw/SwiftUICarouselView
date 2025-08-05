@@ -30,7 +30,17 @@ struct CarouselViewLogger {
     #endif
     }
     
-    
+    static func logPerformanceWarningIfNeeded(itemCount: Int) {
+    #if DEBUG
+        if #unavailable(iOS 17.0) {
+            let threshold: Int = 20
+            
+            if itemCount > threshold {
+                warning(message: "[Performance warning] - \(itemCount) items detected (threshold: \(threshold)). iOS < 17 uses HStack - high memory usage expected. Consider reducing item count or updating to iOS 17+.")
+            }
+        }
+    #endif
+    }
 }
 
 // MARK: - Private Methods

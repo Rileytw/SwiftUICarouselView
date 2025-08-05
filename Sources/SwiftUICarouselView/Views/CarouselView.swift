@@ -110,6 +110,9 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
         .onChange(of: selectedIndex) { index in
             CarouselViewLogger.logIndexWarningIfNeeded(dataSourceCount: dataSource.count, selected: index)
         }
+        .onAppear {
+            CarouselViewLogger.logPerformanceWarningIfNeeded(itemCount: dataSource.count)
+        }
     }
 }
 
