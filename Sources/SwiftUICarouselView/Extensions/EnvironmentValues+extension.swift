@@ -21,10 +21,12 @@ private struct CarouselKey: EnvironmentKey {
 public struct Carousel {
     var indicator: Indicator?
     var scaleAnimation: ScaleAnimation?
+    var isInfiniteLoop: Bool
     
-    public init(indicator: Indicator? = nil, scaleAnimation: ScaleAnimation? = nil) {
+    public init(indicator: Indicator? = nil, scaleAnimation: ScaleAnimation? = nil, isInfiniteLoop: Bool = false) {
         self.indicator = indicator
         self.scaleAnimation = scaleAnimation
+        self.isInfiniteLoop = isInfiniteLoop
     }
 }
 

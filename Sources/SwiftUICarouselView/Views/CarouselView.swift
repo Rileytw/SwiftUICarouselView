@@ -75,6 +75,7 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
     @State private var dragOffset: CGFloat = 0
     @State private var size: CGSize = .zero
     @State private var centeredViewID: Int?
+    @State private var dataSourceArray: [Data] = []
     
     public init(_ dataSource: Data, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.dataSource = dataSource
@@ -111,6 +112,9 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
             CarouselViewLogger.logIndexWarningIfNeeded(dataSourceCount: dataSource.count, selected: index)
         }
         .onAppear {
+            if carousel.isInfiniteLoop {
+                dataSourceArray = [dataSource, dataSource, dataSource]
+            }
             CarouselViewLogger.logPerformanceWarningIfNeeded(itemCount: dataSource.count)
         }
     }
@@ -131,6 +135,10 @@ private extension CarouselView {
         let compensatedSpacing = itemSpacing - scaleReduction
         
         return min(itemSpacing, compensatedSpacing)
+    }
+    
+    var items: [EnumeratedSequence<Data>.Element] {
+       return carousel.isInfiniteLoop ? Array(dataSourceArray.flatMap { $0 }.enumerated()) : Array(dataSource.enumerated())
     }
     
     @ViewBuilder
@@ -162,7 +170,17 @@ private extension CarouselView {
                 guard let newIndex = newValue else {
                     return
                 }
-                selectedIndex = newIndex
+                updateDataSourceArray()
+                selectedIndex = newIndex % dataSource.count
+            }
+            .onAppear {
+                if carousel.isInfiniteLoop {
+                    // Delay initial scroll position setup to prevent carousel offset
+                    // Add 0.1s delay when setting initial centeredViewID to allow ScrollView layout calculations to complete, preventing visual offset on appear.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        centeredViewID = dataSource.count
+                    }
+                }
             }
         }
     }
@@ -201,10 +219,10 @@ private extension CarouselView {
     
     @ViewBuilder
     var itemsView: some View {
-        ForEach(Array(dataSource.enumerated()), id: \.offset) { index, element in
+        ForEach(items, id: \.offset) { index, element in
             content(element)
                 .frame(width: itemSize.width)
-                .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == selectedIndex, animationValue: selectedIndex)
+                .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == (centeredViewID ?? 0 % dataSource.count), animationValue: selectedIndex)
                 .id(index)
         }
     }
@@ -239,5 +257,41 @@ private extension CarouselView {
         let itemCount = dataSource.count
         guard itemCount > 1 else { return true }
         return (selectedIndex == 0 && value.isScrollToRight) || (selectedIndex == itemCount - 1 && value.isScrollToLeft)
+    }
+    
+    
+    func updateDataSourceArray() {
+        guard carousel.isInfiniteLoop,
+              let centeredViewID = centeredViewID else {
+            return
+        }
+        
+        let itemCount = dataSource.count
+        
+        if centeredViewID == itemCount * 2 {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            
+            withTransaction(transaction) {
+                dataSourceArray.append(dataSource)
+                dataSourceArray.removeFirst()
+                DispatchQueue.main.async {
+                    self.centeredViewID = centeredViewID - itemCount
+                }
+            }
+            
+        } else if centeredViewID == itemCount - 1 {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            
+            withTransaction(transaction) {
+                dataSourceArray.insert(dataSource, at: 0)
+                dataSourceArray.removeLast()
+                
+                DispatchQueue.main.async {
+                    self.centeredViewID = centeredViewID + itemCount
+                }
+            }
+        }
     }
 }

@@ -67,6 +67,13 @@ public extension View {
             style.scaleAnimation = scaleAnimation
         }
     }
+    
+    @available(iOS 17.0, *)
+    func infiniteLoop() -> some View {
+        self.transformEnvironment(\.carousel) { style in
+            style.isInfiniteLoop = true
+        }
+    }
 }
 
 // MARK: - Internal Methods
