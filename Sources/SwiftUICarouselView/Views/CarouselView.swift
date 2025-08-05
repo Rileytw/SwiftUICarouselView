@@ -74,7 +74,6 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     @State private var size: CGSize = .zero
-    @State private var centeredViewID: Int?
     @State private var dataSourceArray: [Data] = []
     
     public init(_ dataSource: Data, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
@@ -137,93 +136,31 @@ private extension CarouselView {
         return min(itemSpacing, compensatedSpacing)
     }
     
-    var items: [EnumeratedSequence<Data>.Element] {
-       return carousel.isInfiniteLoop ? Array(dataSourceArray.flatMap { $0 }.enumerated()) : Array(dataSource.enumerated())
-    }
-    
     @ViewBuilder
     var carouselView: some View {
         if #available(iOS 17.0, *) {
-            scrollCarouselView
-        } else {
-            dragGestureCarouselView
-        }
-    }
-    
-    @available(iOS 17.0, *)
-    @ViewBuilder
-    var scrollCarouselView: some View {
-        GeometryReader {  geometry in
-            let itemWidth = itemSize.width
-            let horizontlMargin = (geometry.size.width - itemWidth) / 2
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: adjustedItemSpacing) {
-                    itemsView
-                }
-                .scrollTargetLayout()
-            }
-            .contentMargins(.horizontal, horizontlMargin)
-            .scrollPosition(id: $centeredViewID, anchor: .center)
-            .scrollTargetBehavior(.viewAligned)
-            .onChange(of: centeredViewID) { _, newValue in
-                guard let newIndex = newValue else {
-                    return
-                }
-                updateDataSourceArray()
-                selectedIndex = newIndex % dataSource.count
-            }
-            .onAppear {
-                if carousel.isInfiniteLoop {
-                    // Delay initial scroll position setup to prevent carousel offset
-                    // Add 0.1s delay when setting initial centeredViewID to allow ScrollView layout calculations to complete, preventing visual offset on appear.
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        centeredViewID = dataSource.count
-                    }
-                }
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var dragGestureCarouselView: some View {
-        let itemWidth = itemSize.width
-        
-        GeometryReader { geometry in
-            HStack(spacing: adjustedItemSpacing) {
-                itemsView
-            }
-            .offset(x: offset + dragOffset)
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-                        guard !shouldDisableDrag(value) else {
-                            return
-                        }
-                        
-                        dragOffset = value.translation.width
-                    }
-                    .onEnded { value in
-                        guard !shouldDisableDrag(value) else {
-                            return
-                        }
-                        
-                        handleDragEnd(value, itemWidth: itemWidth, spacing: adjustedItemSpacing, parentViewWidth: geometry.size.width)
-                    }
+            ScrollCarouselView(
+                selectedIndex: $selectedIndex,
+                dataSource: $dataSource,
+                dataSourceArray: $dataSourceArray,
+                itemSize: $itemSize,
+                adjustedItemSpacing: Binding(
+                    get: { adjustedItemSpacing },
+                    set: { _ in }
+                ),
+                content: content
             )
-            .onAppear {
-                offset = -(itemWidth + adjustedItemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var itemsView: some View {
-        ForEach(items, id: \.offset) { index, element in
-            content(element)
-                .frame(width: itemSize.width)
-                .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == (centeredViewID ?? 0 % dataSource.count), animationValue: selectedIndex)
-                .id(index)
+        } else {
+            DragGestureCarouselView(
+                selectedIndex: $selectedIndex,
+                dataSource: $dataSource,
+                dataSourceArray: $dataSourceArray,
+                itemSize: $itemSize,
+                adjustedItemSpacing: Binding(
+                    get: { adjustedItemSpacing },
+                    set: { _ in }
+                ),
+                content: content)
         }
     }
     
@@ -232,66 +169,6 @@ private extension CarouselView {
         if let firstElement = dataSource.first {
             content(firstElement)
                 .measureSize($itemSize)
-        }
-    }
-    
-    func handleDragEnd(_ value: DragGesture.Value, itemWidth: CGFloat, spacing: CGFloat, parentViewWidth: CGFloat) {
-        let itemFullWidth = itemWidth + spacing
-        let threshold = itemWidth * 0.3
-        
-        withAnimation(.easeOut(duration: 0.3)) {
-            if abs(value.translation.width) > threshold {
-                if value.translation.width > 0 {
-                    selectedIndex =  max(0, selectedIndex - 1)
-                } else {
-                    selectedIndex = min(dataSource.count - 1, selectedIndex + 1)
-                }
-            }
-            
-            dragOffset = 0
-            offset = -itemFullWidth * CGFloat(selectedIndex) + (parentViewWidth - itemWidth) / 2
-        }
-    }
-    
-    func shouldDisableDrag(_ value: DragGesture.Value) -> Bool {
-        let itemCount = dataSource.count
-        guard itemCount > 1 else { return true }
-        return (selectedIndex == 0 && value.isScrollToRight) || (selectedIndex == itemCount - 1 && value.isScrollToLeft)
-    }
-    
-    
-    func updateDataSourceArray() {
-        guard carousel.isInfiniteLoop,
-              let centeredViewID = centeredViewID else {
-            return
-        }
-        
-        let itemCount = dataSource.count
-        
-        if centeredViewID == itemCount * 2 {
-            var transaction = Transaction()
-            transaction.disablesAnimations = true
-            
-            withTransaction(transaction) {
-                dataSourceArray.append(dataSource)
-                dataSourceArray.removeFirst()
-                DispatchQueue.main.async {
-                    self.centeredViewID = centeredViewID - itemCount
-                }
-            }
-            
-        } else if centeredViewID == itemCount - 1 {
-            var transaction = Transaction()
-            transaction.disablesAnimations = true
-            
-            withTransaction(transaction) {
-                dataSourceArray.insert(dataSource, at: 0)
-                dataSourceArray.removeLast()
-                
-                DispatchQueue.main.async {
-                    self.centeredViewID = centeredViewID + itemCount
-                }
-            }
         }
     }
 }
