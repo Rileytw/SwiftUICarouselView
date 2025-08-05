@@ -139,7 +139,7 @@ private extension CarouselView {
         }
     }
     
-    @available (iOS 17.0, *)
+    @available(iOS 17.0, *)
     @ViewBuilder
     var scrollCarouselView: some View {
         GeometryReader {  geometry in
