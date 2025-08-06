@@ -76,29 +76,29 @@ private extension ScrollCarouselView {
         }
         
         let itemCount = dataSource.count
+        let currentSegments = dataSourceArray.count
+        let rightTrigger = (currentSegments - 1) * itemCount
+        let leftTrigger = itemCount - 1
         
-        if centeredViewID == itemCount * 2 {
+        if centeredViewID >= rightTrigger  {
             var transaction = Transaction()
             transaction.disablesAnimations = true
             
             withTransaction(transaction) {
-                DispatchQueue.main.async {
-                    dataSourceArray.append(dataSource)
-                    dataSourceArray.removeFirst()
-                    self.centeredViewID = centeredViewID - itemCount
-                }
+                dataSourceArray.append(dataSource)
+                dataSourceArray.removeFirst()
+                self.centeredViewID = centeredViewID - itemCount
             }
-        } else if centeredViewID == itemCount - 1 {
+        } else if centeredViewID <= leftTrigger {
             var transaction = Transaction()
             transaction.disablesAnimations = true
             
             withTransaction(transaction) {
-                DispatchQueue.main.async {
-                    dataSourceArray.insert(dataSource, at: 0)
-                    dataSourceArray.removeLast()
-                    self.centeredViewID = centeredViewID + itemCount
-                }
+                dataSourceArray.insert(dataSource, at: 0)
+                dataSourceArray.removeLast()
+                self.centeredViewID = centeredViewID + itemCount
             }
         }
     }
 }
+
