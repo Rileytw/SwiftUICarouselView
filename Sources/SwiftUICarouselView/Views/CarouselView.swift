@@ -153,7 +153,6 @@ private extension CarouselView {
             DragGestureCarouselView(
                 selectedIndex: $selectedIndex,
                 dataSource: $dataSource,
-                dataSourceArray: $dataSourceArray,
                 itemSize: $itemSize,
                 adjustedItemSpacing: Binding(
                     get: { adjustedItemSpacing },

@@ -12,7 +12,6 @@ struct DragGestureCarouselView<Data, Content>: View where Data: RandomAccessColl
     
     @Binding var selectedIndex: Int
     @Binding var dataSource: Data
-    @Binding var dataSourceArray: [Data]
     @Binding var itemSize: CGSize
     @Binding var adjustedItemSpacing: CGFloat
     let content: (Data.Element) -> Content
@@ -24,14 +23,14 @@ struct DragGestureCarouselView<Data, Content>: View where Data: RandomAccessColl
         let itemWidth = itemSize.width
         
         GeometryReader { geometry in
-            HStack(spacing: adjustedItemSpacing) {
-                ForEach(items, id: \.offset) { index, element in
+            ZStack() {
+                ForEach(Array(dataSource.enumerated()), id: \.offset) { index, element in
                     content(element)
                         .frame(width: itemSize.width)
                         .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == selectedIndex, animationValue: selectedIndex)
+                        .offset(x: getOffset(index: index))
                 }
             }
-            .offset(x: offset + dragOffset)
             .gesture(
                 DragGesture()
                     .onChanged { value in
@@ -50,7 +49,7 @@ struct DragGestureCarouselView<Data, Content>: View where Data: RandomAccessColl
                     }
             )
             .onAppear {
-                offset = -(itemWidth + adjustedItemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
+                updateOffset(parentViewWidth: geometry.size.width)
             }
         }
     }
@@ -58,8 +57,9 @@ struct DragGestureCarouselView<Data, Content>: View where Data: RandomAccessColl
 
 // MARK: - Private Methods
 private extension DragGestureCarouselView {
-    var items: [EnumeratedSequence<Data>.Element] {
-       return carousel.isInfiniteLoop ? Array(dataSourceArray.flatMap { $0 }.enumerated()) : Array(dataSource.enumerated())
+    func getOffset(index: Int) -> CGFloat {
+        let itemWidth = itemSize.width
+        return (itemWidth + adjustedItemSpacing) * CGFloat(index) + offset + dragOffset
     }
     
     func handleDragEnd(_ value: DragGesture.Value, itemWidth: CGFloat, spacing: CGFloat, parentViewWidth: CGFloat) {
@@ -75,9 +75,15 @@ private extension DragGestureCarouselView {
                 }
             }
             
-            dragOffset = 0
-            offset = -itemFullWidth * CGFloat(selectedIndex) + (parentViewWidth - itemWidth) / 2
+            updateOffset(parentViewWidth: parentViewWidth)
         }
+    }
+    
+    func updateOffset(parentViewWidth: CGFloat) {
+        let itemWidth = itemSize.width
+        let itemFullWidth = itemWidth + adjustedItemSpacing
+        offset = -itemFullWidth * CGFloat(selectedIndex) + (parentViewWidth - itemWidth) / 2
+        dragOffset = 0
     }
     
     func shouldDisableDrag(_ value: DragGesture.Value) -> Bool {
