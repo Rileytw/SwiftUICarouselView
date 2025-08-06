@@ -18,10 +18,11 @@ struct ContentView: View {
     ]
     
     var body: some View {
-        CarouselView(cards, selectedIndex: $currentIndex, itemSpacing: 0) { card in
+        CarouselView(cards, selectedIndex: $currentIndex) { card in
             createCard(card)
                 .padding(.vertical, 4)
         }
+        .infiniteLoop()
         .scaleAnimation()
         .indicator()
         .frame(maxWidth: .infinity)

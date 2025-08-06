@@ -20,7 +20,7 @@ import SwiftUI
 /// - **Generic Data Support**: Works with any `RandomAccessCollection` items
 /// - **Responsive Design**: Adapts to container width while maintaining content proportions
 /// - **Smooth Interactions**: Gesture-based navigation with customizable animations
-/// - **Flexible Styling**: Support for indicators, scale animations, and custom spacing
+/// - **Flexible Styling**: Support for indicators, scale animations, ininite scrolling, and custom spacing
 ///
 /// ## Basic Usage
 /// ```swift
@@ -50,6 +50,7 @@ import SwiftUI
 /// }
 /// .indicator(.gray.opacity(0.4), .blue, topPadding: 20)
 /// .scaleAnimation()
+/// .infiniteLoop()
 /// ```
 ///
 /// ## Custom Spacing and Indicators
@@ -74,7 +75,6 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     @State private var size: CGSize = .zero
-    @State private var centeredViewID: Int?
     
     public init(_ dataSource: Data, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.dataSource = dataSource
@@ -110,9 +110,6 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
         .onChange(of: selectedIndex) { index in
             CarouselViewLogger.logIndexWarningIfNeeded(dataSourceCount: dataSource.count, selected: index)
         }
-        .onAppear {
-            CarouselViewLogger.logPerformanceWarningIfNeeded(itemCount: dataSource.count)
-        }
     }
 }
 
@@ -136,76 +133,25 @@ private extension CarouselView {
     @ViewBuilder
     var carouselView: some View {
         if #available(iOS 17.0, *) {
-            scrollCarouselView
+            ScrollCarouselView(
+                selectedIndex: $selectedIndex,
+                dataSource: $dataSource,
+                itemSize: $itemSize,
+                adjustedItemSpacing: Binding(
+                    get: { adjustedItemSpacing },
+                    set: { _ in }
+                ),
+                content: content)
         } else {
-            dragGestureCarouselView
-        }
-    }
-    
-    @available(iOS 17.0, *)
-    @ViewBuilder
-    var scrollCarouselView: some View {
-        GeometryReader {  geometry in
-            let itemWidth = itemSize.width
-            let horizontlMargin = (geometry.size.width - itemWidth) / 2
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: adjustedItemSpacing) {
-                    itemsView
-                }
-                .scrollTargetLayout()
-            }
-            .contentMargins(.horizontal, horizontlMargin)
-            .scrollPosition(id: $centeredViewID, anchor: .center)
-            .scrollTargetBehavior(.viewAligned)
-            .onChange(of: centeredViewID) { _, newValue in
-                guard let newIndex = newValue else {
-                    return
-                }
-                selectedIndex = newIndex
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var dragGestureCarouselView: some View {
-        let itemWidth = itemSize.width
-        
-        GeometryReader { geometry in
-            HStack(spacing: adjustedItemSpacing) {
-                itemsView
-            }
-            .offset(x: offset + dragOffset)
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-                        guard !shouldDisableDrag(value) else {
-                            return
-                        }
-                        
-                        dragOffset = value.translation.width
-                    }
-                    .onEnded { value in
-                        guard !shouldDisableDrag(value) else {
-                            return
-                        }
-                        
-                        handleDragEnd(value, itemWidth: itemWidth, spacing: adjustedItemSpacing, parentViewWidth: geometry.size.width)
-                    }
-            )
-            .onAppear {
-                offset = -(itemWidth + adjustedItemSpacing) * CGFloat(selectedIndex) + (geometry.size.width - itemWidth) / 2
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var itemsView: some View {
-        ForEach(Array(dataSource.enumerated()), id: \.offset) { index, element in
-            content(element)
-                .frame(width: itemSize.width)
-                .applyScaleAnimation(carousel.scaleAnimation, isSelected: index == selectedIndex, animationValue: selectedIndex)
-                .id(index)
+            DragGestureCarouselView(
+                selectedIndex: $selectedIndex,
+                dataSource: $dataSource,
+                itemSize: $itemSize,
+                adjustedItemSpacing: Binding(
+                    get: { adjustedItemSpacing },
+                    set: { _ in }
+                ),
+                content: content)
         }
     }
     
@@ -215,29 +161,5 @@ private extension CarouselView {
             content(firstElement)
                 .measureSize($itemSize)
         }
-    }
-    
-    func handleDragEnd(_ value: DragGesture.Value, itemWidth: CGFloat, spacing: CGFloat, parentViewWidth: CGFloat) {
-        let itemFullWidth = itemWidth + spacing
-        let threshold = itemWidth * 0.3
-        
-        withAnimation(.easeOut(duration: 0.3)) {
-            if abs(value.translation.width) > threshold {
-                if value.translation.width > 0 {
-                    selectedIndex =  max(0, selectedIndex - 1)
-                } else {
-                    selectedIndex = min(dataSource.count - 1, selectedIndex + 1)
-                }
-            }
-            
-            dragOffset = 0
-            offset = -itemFullWidth * CGFloat(selectedIndex) + (parentViewWidth - itemWidth) / 2
-        }
-    }
-    
-    func shouldDisableDrag(_ value: DragGesture.Value) -> Bool {
-        let itemCount = dataSource.count
-        guard itemCount > 1 else { return true }
-        return (selectedIndex == 0 && value.isScrollToRight) || (selectedIndex == itemCount - 1 && value.isScrollToLeft)
     }
 }
