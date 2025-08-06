@@ -20,7 +20,7 @@ A modern, customizable carousel view for SwiftUI with automatic sizing and nativ
 - **Native SwiftUI API** - Feels like a built-in SwiftUI component
 - **Smooth Animations** - Built-in scale effects and transitions
 - **Customizable Indicators** - Default and custom indicator styles
-- **Gesture Navigation** - Smooth drag-to-navigate with boundary protection
+- **Infinite Scrolling** - Support inifinite scrolling
 
 ## Requirements
 
@@ -83,6 +83,7 @@ CarouselView(
 }
 .indicator(.gray.opacity(0.4), .blue, topPadding: 20)
 .scaleAnimation()
+.infiniteLoop()
 ```
 
 ## Documentation
@@ -122,6 +123,12 @@ CarouselView(
 
 // Custom scale animation
 .scaleAnimation(ScaleAnimation(unselectedScale: 0.8, animation: .easeInOut))
+```
+
+#### Infinite Loop
+```swift
+// Default infinite loop
+.infiniteLoop()
 ```
 
 ## Usage Examples
@@ -211,8 +218,7 @@ CarouselView(items, selectedIndex: $selectedIndex, itemSpacing: 32) { item in
 
 - **Progressive Enhancement**: Automatically uses the best implementation for each iOS version
   - **iOS 17+**: Native ScrollView with lazy loading and smooth scroll physics
-  - **iOS 14-16**: Custom HStack implementation with drag gesture navigation  
-    *(⚠️ Performance Note: iOS 14-16 loads all items in memory simultaneously. Debug builds will show warnings for larger datasets.)*
+  - **iOS 14-16**: Custom ZStack implementation with drag gesture navigation
 
 ## License
 
