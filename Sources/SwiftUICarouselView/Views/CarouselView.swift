@@ -20,7 +20,7 @@ import SwiftUI
 /// - **Generic Data Support**: Works with any `RandomAccessCollection` items
 /// - **Responsive Design**: Adapts to container width while maintaining content proportions
 /// - **Smooth Interactions**: Gesture-based navigation with customizable animations
-/// - **Flexible Styling**: Support for indicators, scale animations, and custom spacing
+/// - **Flexible Styling**: Support for indicators, scale animations, ininite scrolling, and custom spacing
 ///
 /// ## Basic Usage
 /// ```swift
@@ -50,6 +50,7 @@ import SwiftUI
 /// }
 /// .indicator(.gray.opacity(0.4), .blue, topPadding: 20)
 /// .scaleAnimation()
+/// .infiniteLoop()
 /// ```
 ///
 /// ## Custom Spacing and Indicators

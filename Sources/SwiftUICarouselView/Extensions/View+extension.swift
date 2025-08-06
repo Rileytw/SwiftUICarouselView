@@ -67,8 +67,14 @@ public extension View {
             style.scaleAnimation = scaleAnimation
         }
     }
-    
-    @available(iOS 17.0, *)
+
+    /// Enables infinite loop scrolling for carousel items
+    ///
+    /// When enabled, the carousel creates seamless infinite scrolling by dynamically
+    /// managing duplicate data segments. Users can scroll continuously in either direction
+    /// without reaching boundaries.
+    ///
+    /// - **Returns**: Carousel view with infinite loop scrolling enabled
     func infiniteLoop() -> some View {
         self.transformEnvironment(\.carousel) { style in
             style.isInfiniteLoop = true
