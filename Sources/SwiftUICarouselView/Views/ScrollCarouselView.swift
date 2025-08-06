@@ -13,11 +13,11 @@ struct ScrollCarouselView<Data, Content>: View where Data: RandomAccessCollectio
     
     @Binding var selectedIndex: Int
     @Binding var dataSource: Data
-    @Binding var dataSourceArray: [Data]
     @Binding var itemSize: CGSize
     @Binding var adjustedItemSpacing: CGFloat
     let content: (Data.Element) -> Content
     @State private var centeredViewID: Int?
+    @State private var dataSourceArray: [Data] = []
     
     var body: some View {
         GeometryReader {  geometry in
@@ -47,7 +47,10 @@ struct ScrollCarouselView<Data, Content>: View where Data: RandomAccessCollectio
             }
             .onAppear {
                 centeredViewID = selectedIndex
+                
                 if carousel.isInfiniteLoop {
+                    dataSourceArray = [dataSource, dataSource, dataSource]
+                    
                     // Delay initial scroll position setup to prevent carousel offset
                     // Add 0.1s delay when setting initial centeredViewID to allow ScrollView layout calculations to complete, preventing visual offset on appear.
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

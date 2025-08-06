@@ -74,7 +74,6 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
     @State private var offset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
     @State private var size: CGSize = .zero
-    @State private var dataSourceArray: [Data] = []
     
     public init(_ dataSource: Data, selectedIndex: Binding<Int>, itemSpacing: CGFloat = .carouselDefaultSpacing, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.dataSource = dataSource
@@ -111,9 +110,6 @@ public struct CarouselView<Data, Content>: View where Data: RandomAccessCollecti
             CarouselViewLogger.logIndexWarningIfNeeded(dataSourceCount: dataSource.count, selected: index)
         }
         .onAppear {
-            if carousel.isInfiniteLoop {
-                dataSourceArray = [dataSource, dataSource, dataSource]
-            }
             CarouselViewLogger.logPerformanceWarningIfNeeded(itemCount: dataSource.count)
         }
     }
@@ -142,7 +138,6 @@ private extension CarouselView {
             ScrollCarouselView(
                 selectedIndex: $selectedIndex,
                 dataSource: $dataSource,
-                dataSourceArray: $dataSourceArray,
                 itemSize: $itemSize,
                 adjustedItemSpacing: Binding(
                     get: { adjustedItemSpacing },
