@@ -34,6 +34,7 @@ struct DragGestureCarouselView<Data, Content>: View where Data: RandomAccessColl
                 }
             }
         }
+        .measureSize($containerViewSize)
         .gesture(
             DragGesture()
                 .updating($dragOffset) { drag, offset, _ in
@@ -45,10 +46,22 @@ struct DragGestureCarouselView<Data, Content>: View where Data: RandomAccessColl
             let itemCount = dataSource.count
             selectedIndex = (carouselLocation % itemCount + itemCount) % itemCount
         })
+        .onReceive(autoPlayManager.$shouldMoveNext, perform: { shouldMoveNext in
+            if shouldMoveNext {
+                autoPlayToNextItem()
+            }
+        })
         .onAppear {
             carouselLocation = selectedIndex
+            
+            if let autoPlay = carousel.autoPlay {
+                autoPlayManager.configure(autoPlay)
+                autoPlayManager.start()
+            }
         }
-        .measureSize($containerViewSize)
+        .onDisappear {
+            autoPlayManager.stop()
+        }
     }
 }
 
@@ -183,5 +196,41 @@ private extension DragGestureCarouselView {
             return true
         }
         return (selectedIndex == 0 && value.isScrollToRight) || (selectedIndex == itemCount - 1 && value.isScrollToLeft)
+    }
+    
+    func autoPlayToNextItem() {
+        guard let autoPlay = carousel.autoPlay,
+              !dataSource.isEmpty else {
+            return
+        }
+        
+        let itemCount = dataSource.count
+        let isInfinite = carousel.isInfiniteLoop
+        let currentID = carouselLocation
+        
+        switch (autoPlay.direction, isInfinite) {
+        case (.forward, true):
+            moveToNextPosition(currentID + 1)
+        case (.forward, false):
+            if currentID >= itemCount - 1 {
+                autoPlayManager.stop()
+            } else {
+                moveToNextPosition(currentID + 1)
+            }
+        case (.backward, true):
+            moveToNextPosition(currentID - 1)
+        case (.backward, false):
+            if currentID <= 0 {
+                autoPlayManager.stop()
+            } else {
+                moveToNextPosition(currentID - 1)
+            }
+        }
+    }
+    
+    func moveToNextPosition(_ nextID: Int) {
+        withAnimation(.easeInOut(duration: 0.5)) {
+            carouselLocation = nextID
+        }
     }
 }
