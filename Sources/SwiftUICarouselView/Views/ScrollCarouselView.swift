@@ -10,6 +10,7 @@ import SwiftUI
 @available(iOS 17.0, *)
 struct ScrollCarouselView<Data, Content>: View where Data: RandomAccessCollection, Content: View {
     @Environment(\.carousel) private var carousel
+    @EnvironmentObject var autoPlayManager: CarouselAutoPlayManager
     
     @Binding var selectedIndex: Int
     @Binding var dataSource: Data
@@ -45,6 +46,11 @@ struct ScrollCarouselView<Data, Content>: View where Data: RandomAccessCollectio
                 updateDataSourceArray()
                 selectedIndex = newIndex % dataSource.count
             }
+            .onReceive(autoPlayManager.$shouldMoveNext) { shouldMoveNext in
+                if shouldMoveNext {
+                    autoPlayToNextItem()
+                }
+            }
             .onAppear {
                 centeredViewID = selectedIndex
                 
@@ -57,6 +63,14 @@ struct ScrollCarouselView<Data, Content>: View where Data: RandomAccessCollectio
                         centeredViewID = dataSource.count + selectedIndex
                     }
                 }
+                
+                if let autoPlay = carousel.autoPlay {
+                    autoPlayManager.configure(autoPlay)
+                    autoPlayManager.start()
+                }
+            }
+            .onDisappear {
+                autoPlayManager.stop()
             }
         }
     }
@@ -80,6 +94,7 @@ private extension ScrollCarouselView {
         let rightTrigger = (currentSegments - 1) * itemCount
         let leftTrigger = itemCount - 1
         
+        // TODO: Update animation
         if centeredViewID >= rightTrigger  {
             var transaction = Transaction()
             transaction.disablesAnimations = true
@@ -100,5 +115,40 @@ private extension ScrollCarouselView {
             }
         }
     }
-}
+    
+    func autoPlayToNextItem() {
+        guard let autoPlay = carousel.autoPlay,
+              let currentID = centeredViewID,
+              !dataSource.isEmpty else {
+            return
+        }
+        
+        let itemCount = dataSource.count
+        let isInfinite = carousel.isInfiniteLoop
+        
+        switch (autoPlay.direction, isInfinite) {
+        case (.forward, true):
+            moveToNextPosition(currentID + 1)
+        case (.forward, false):
+            if currentID >= itemCount - 1 {
+                autoPlayManager.stop()
+            } else {
+                moveToNextPosition(currentID + 1)
+            }
+        case (.backward, true):
+            moveToNextPosition(currentID - 1)
+        case (.backward, false):
+            if currentID <= 0 {
+                autoPlayManager.stop()
+            } else {
+                moveToNextPosition(currentID - 1)
+            }
+        }
+    }
 
+    func moveToNextPosition(_ nextID: Int) {
+        withAnimation(.easeInOut(duration: 0.5)) {
+            centeredViewID = nextID
+        }
+    }
+}

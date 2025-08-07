@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DragGestureCarouselView<Data, Content>: View where Data: RandomAccessCollection, Content: View {
     @Environment(\.carousel) private var carousel
+    @EnvironmentObject var autoPlayManager: CarouselAutoPlayManager
     @GestureState private var dragOffset: CGFloat = .zero
     
     @Binding var selectedIndex: Int

@@ -66,6 +66,7 @@ import SwiftUI
 /// ```
 public struct CarouselView<Data, Content>: View where Data: RandomAccessCollection, Content: View {
     @Environment(\.carousel) private var carousel
+    @State private var autoPlayManager = CarouselAutoPlayManager()
     
     @Binding var selectedIndex: Int
     let content: (Data.Element) -> Content
@@ -142,6 +143,7 @@ private extension CarouselView {
                     set: { _ in }
                 ),
                 content: content)
+            .environmentObject(autoPlayManager)
         } else {
             DragGestureCarouselView(
                 selectedIndex: $selectedIndex,
@@ -152,6 +154,7 @@ private extension CarouselView {
                     set: { _ in }
                 ),
                 content: content)
+            .environmentObject(autoPlayManager)
         }
     }
     
